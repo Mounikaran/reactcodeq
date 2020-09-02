@@ -24,18 +24,18 @@ class Login extends Component {
 
   login = (event) => {
     // console.log(this.state.credentials);
-    const options = {
-      url: "http://127.0.0.1:8000/auth",
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      data: this.state.credentials,
-    };
-    axios(options).then((response) => {
-      console.log(response.status);
-    });
+    // const options = {
+    //   url: "http://127.0.0.1:8000/auth",
+    //   method: "POST",
+    //   headers: {
+    //     Accept: "application/json",
+    //     "Content-Type": "application/json",
+    //   },
+    //   data: this.state.credentials,
+    // };
+    // axios(options).then((response) => {
+    //   console.log(response.status);
+    // });
     // fetch("http://127.0.0.1:8000/auth/", {
     //   method: "POST",
     //   headers: { "Content-Type": "application/json" },
