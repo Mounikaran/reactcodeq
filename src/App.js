@@ -8,9 +8,15 @@ import NavBar from "./components/layouts/NavBar";
 import Footer from "./components/layouts/Footer";
 import Routes from "./Routes";
 
+import * as actions from "./store/actions/auth";
+
 axios.defaults.baseURL = "http://127.0.0.1:8000/";
 
 class App extends Component {
+  componentDidMount() {
+    this.props.onTryAutoSignup();
+  }
+
   render() {
     return (
       <Fragment>
@@ -32,7 +38,13 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(App);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onTryAutoSignup: () => dispatch(actions.authCheckState()),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
 
 // function App() {
 //   const [ token, setToken ] = useState("");

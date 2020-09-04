@@ -24,6 +24,7 @@ class NavBar extends Component {
     this.setState({ isOpen: !this.state.isOpen });
   };
   render() {
+    const { isAuthenticated } = this.props;
     return (
       <MDBNavbar className="blue-gradient container-fluid" dark expand="md">
         <MDBContainer>
@@ -32,26 +33,28 @@ class NavBar extends Component {
           </MDBNavbarBrand>
           <MDBNavbarToggler onClick={this.toggleCollapse} />
           <MDBCollapse id="navbarCollapse3" isOpen={this.state.isOpen} navbar>
-            <MDBNavbarNav right>
-              <MDBNavItem>
-                <MDBNavLink to="/">Home</MDBNavLink>
-              </MDBNavItem>
-              <MDBNavItem>
-                <MDBNavLink to="/">Dashboard</MDBNavLink>
-              </MDBNavItem>
-              <MDBNavItem>
-                <MDBNavLink to="/profile">Profile</MDBNavLink>
-              </MDBNavItem>
-              <MDBNavItem>
-                <MDBNavLink to="/login">Login</MDBNavLink>
-              </MDBNavItem>
-              <MDBNavItem>
-                <MDBNavLink to="/register">Register</MDBNavLink>
-              </MDBNavItem>
-              <MDBNavItem>
-                <MDBNavLink to="/">Logout</MDBNavLink>
-              </MDBNavItem>
-            </MDBNavbarNav>
+            {isAuthenticated ? (
+              <MDBNavbarNav right>
+                <MDBNavItem>
+                  <MDBNavLink to="/">Dashboard</MDBNavLink>
+                </MDBNavItem>
+                <MDBNavItem>
+                  <MDBNavLink to="/profile">Profile</MDBNavLink>
+                </MDBNavItem>
+                <MDBNavItem>
+                  <MDBNavLink to="/">Logout</MDBNavLink>
+                </MDBNavItem>
+              </MDBNavbarNav>
+            ) : (
+              <MDBNavbarNav right>
+                <MDBNavItem>
+                  <MDBNavLink to="/login">Login</MDBNavLink>
+                </MDBNavItem>
+                <MDBNavItem>
+                  <MDBNavLink to="/register">Register</MDBNavLink>
+                </MDBNavItem>
+              </MDBNavbarNav>
+            )}
           </MDBCollapse>
         </MDBContainer>
       </MDBNavbar>

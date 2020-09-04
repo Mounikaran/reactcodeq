@@ -18,9 +18,7 @@ class Register extends Component {
       credentials: {
         username: "",
         password: "",
-        first_name: "",
         email: "",
-        last_name: "",
       },
       confirm_password: "",
       message: "",
@@ -64,7 +62,7 @@ class Register extends Component {
     return (
       <MDBContainer fluid className="pt-md-4 px-0">
         <div className="d-flex justify-content-center w-100">
-          <MDBCard style={{ width: "40rem" }}>
+          <MDBCard style={{ width: "30rem" }}>
             <MDBCardBody>
               <div className="text-center">
                 <h3 className="dark-grey-text mb-5">
@@ -73,37 +71,7 @@ class Register extends Component {
               </div>
               <form onSubmit={this.signup}>
               <MDBRow>
-                <MDBCol md="6">
-                  <MDBInput
-                    label="First Name"
-                    group
-                    type="text"
-                    validate
-                    outline
-                    name="first_name"
-                    error="wrong"
-                    success="right"
-                    onChange={this.inputChanged}
-                    value={this.state.credentials.firstname}
-                  />
-                </MDBCol>
-                <MDBCol md="6">
-                  <MDBInput
-                    label="Last Name"
-                    group
-                    type="text"
-                    validate
-                    outline
-                    name="last_name"
-                    error="wrong"
-                    success="right"
-                    onChange={this.inputChanged}
-                    value={this.state.credentials.lastname}
-                  />
-                </MDBCol>
-              </MDBRow>
-              <MDBRow>
-                <MDBCol md="6">
+                <MDBCol md="12">
                   <MDBInput
                     label="Username"
                     group
@@ -117,7 +85,7 @@ class Register extends Component {
                     value={this.state.credentials.username}
                   />
                 </MDBCol>
-                <MDBCol md="6">
+                <MDBCol md="12">
                   <MDBInput
                     label="Email Address"
                     group
@@ -131,9 +99,8 @@ class Register extends Component {
                     value={this.state.credentials.email}
                   />
                 </MDBCol>
-              </MDBRow>
-              <MDBRow>
-                <MDBCol md="6">
+              
+                <MDBCol md="12">
                   <MDBInput
                     label="Create password"
                     group
@@ -146,7 +113,7 @@ class Register extends Component {
                     value={this.state.credentials.password}
                   />
                 </MDBCol>
-                <MDBCol md="6">
+                <MDBCol md="12">
                   <MDBInput
                     label="Confirm password"
                     group
