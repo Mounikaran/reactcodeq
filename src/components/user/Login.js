@@ -10,7 +10,6 @@ import {
   MDBContainer,
   MDBIcon,
 } from "mdbreact";
-
 class Login extends Component {
   constructor() {
     super();
@@ -19,33 +18,34 @@ class Login extends Component {
         username: "",
         password: "",
       },
+      token: null,
+      // user: {
+      //   id: "",
+      //   username: "",
+      //   first_name: "",
+      //   last_name: "",
+      //   email: "",
+      //   is_superuser: "",
+      //   is_staff: "",
+      //   is_active: "",
+      //   last_login: "",
+      //   date_joined: "",
+      // },
     };
   }
-
   login = (event) => {
-    // console.log(this.state.credentials);
-    // const options = {
-    //   url: "http://127.0.0.1:8000/auth",
-    //   method: "POST",
-    //   headers: {
-    //     Accept: "application/json",
-    //     "Content-Type": "application/json",
-    //   },
-    //   data: this.state.credentials,
-    // };
-    // axios(options).then((response) => {
-    //   console.log(response.status);
-    // });
-    // fetch("http://127.0.0.1:8000/auth/", {
-    //   method: "POST",
-    //   headers: { "Content-Type": "application/json" },
-    //   body: JSON.stringify(this.state.credentials),
-    // })
-    //   .then((data) => data.json())
-    //   .then((data) => {
-    //     console.log(data.token);
-    //   })
-    //   .catch((error) => console.log(error));
+    event.preventDefault();
+    const data = this.state.credentials;
+    axios
+      .post("auth/", data)
+      .then((res) => res.data)
+      .then((res) =>
+        this.setState({
+          token: res.token,
+        })
+      )
+      .then((res) => this.props.userLogin(this.state.token))
+      .catch((error) => console.log(error));
   };
 
   inputChanged = (event) => {
@@ -67,7 +67,8 @@ class Login extends Component {
                   <strong>Sign in</strong>
                 </h3>
               </div>
-              {/* <MDBInput
+              <form onSubmit={this.login}>
+                {/* <MDBInput
                 label="Email Address"
                 group
                 type="email"
@@ -76,43 +77,43 @@ class Login extends Component {
                 success="right"
                 name="email"
               /> */}
-              <MDBInput
-                label="Username"
-                group
-                type="text"
-                validate
-                error="wrong"
-                success="right"
-                name="username"
-                onChange={this.inputChanged}
-                value={this.state.credentials.username}
-              />
-              <MDBInput
-                label="Password"
-                group
-                type="password"
-                validate
-                name="password"
-                value={this.state.credentials.password}
-                onChange={this.inputChanged}
-                containerClass="mb-0"
-              />
-              <p className="font-small blue-text d-flex justify-content-end pb-3">
-                Forgot
-                <a href="#!" className="blue-text ml-1">
-                  Password?
-                </a>
-              </p>
-              <div className="text-center mb-3">
-                <MDBBtn
-                  type="button"
-                  gradient="blue"
-                  className="btn-block z-depth-1a"
-                  onClick={this.login}
-                >
-                  Sign in
-                </MDBBtn>
-              </div>
+                <MDBInput
+                  label="Username"
+                  group
+                  type="text"
+                  validate
+                  error="wrong"
+                  success="right"
+                  name="username"
+                  onChange={this.inputChanged}
+                  value={this.state.credentials.username}
+                />
+                <MDBInput
+                  label="Password"
+                  group
+                  type="password"
+                  validate
+                  name="password"
+                  value={this.state.credentials.password}
+                  onChange={this.inputChanged}
+                  containerClass="mb-0"
+                />
+                <p className="font-small blue-text d-flex justify-content-end pb-3">
+                  Forgot
+                  <a href="#!" className="blue-text ml-1">
+                    Password?
+                  </a>
+                </p>
+                <div className="text-center mb-3">
+                  <MDBBtn
+                    gradient="blue"
+                    className="btn-block z-depth-1a"
+                    type="submit"
+                  >
+                    Sign in
+                  </MDBBtn>
+                </div>
+              </form>
               <p className="font-small dark-grey-text text-right d-flex justify-content-center mb-3 pt-2">
                 or Sign in with:
               </p>

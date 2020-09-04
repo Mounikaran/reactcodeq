@@ -27,10 +27,11 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-CORS_ALLOW_ALL_ORIGINS = True
-CORS_ORIGIN_ALLOW = True
-CORS_ALLOW_CREDENTIALS = True
+CORS_ORIGIN_ALLOW_ALL = True
 
+# CORS_ALLOWED_ORIGINS = [
+#     "http://127.0.0.1:3000",
+# ]
 
 # Application definition
 
@@ -42,23 +43,33 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'rest_auth',
+    'rest_auth.registration',
+    
+    'allauth',
+    'allauth.account',
     'rest_framework',
+    'django.contrib.sites',
     'rest_framework.authtoken',
     'corsheaders',
     'multiselectfield',
 
-    'account',
+    'useraccount',
     'post',
 ]
+
+SITE_ID = 1
 
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
-    #
-
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ]
 }
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -66,8 +77,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-
-    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'codeq.urls'

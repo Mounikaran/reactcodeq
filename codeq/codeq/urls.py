@@ -22,10 +22,17 @@ from django.views.generic import TemplateView
 from rest_framework.authtoken.views import obtain_auth_token
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-
-    path('account/', include('account.urls')),
+    # custom homepage
     path('',TemplateView.as_view(template_name = 'index.html')),
-    path('auth/', obtain_auth_token),
+    # admin url
+    path('admin/', admin.site.urls),
+    # apps urls
+    path('account/', include('useraccount.urls')),
+    path('post/', include('post.urls')),
+
+    # rest framwork auth urls
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    path('rest-auth/', include('rest_auth.urls')),
+    path('rest-auth/registration/', include('rest_auth.registration.urls')),
+    
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
