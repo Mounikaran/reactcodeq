@@ -9,20 +9,27 @@ import Profile from "./components/user/Profile";
 class Routes extends Component {
   constructor(props) {
     super(props);
-    this.state = {}
+    this.state = {};
   }
   render() {
-    const { userLogin } = this.props;
     return (
       <Switch>
         <Route
           exact
           path="/login"
-          component={() => <Login userLogin={userLogin} />}
+          component={() => <Login {...this.props} />}
         />
-        <Route exact path="/register" component={Register} />
-        <Route exact path="/profile" component={Profile} />
-        <Route component={HomePage} />
+        <Route
+          exact
+          path="/register"
+          component={() => <Register {...this.props} />}
+        />
+        <Route
+          exact
+          path="/profile"
+          component={() => <Profile {...this.props} />}
+        />
+        <Route exact path="/" component={() => <HomePage {...this.props} />} />
       </Switch>
     );
   }

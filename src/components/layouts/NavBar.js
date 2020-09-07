@@ -1,5 +1,7 @@
 import React, { Component } from "react";
-
+import { connect } from "react-redux";
+import { Redirect, withRouter, Link } from "react-router-dom";
+import * as actions from "../../store/actions/auth";
 import {
   MDBNavbar,
   MDBNavbarBrand,
@@ -10,6 +12,7 @@ import {
   MDBCollapse,
   MDBContainer,
 } from "mdbreact";
+
 
 class NavBar extends Component {
   constructor(props) {
@@ -23,13 +26,20 @@ class NavBar extends Component {
   toggleCollapse = () => {
     this.setState({ isOpen: !this.state.isOpen });
   };
+
+  logout = (event) => {
+    event.preventDefault();
+    this.props.logout();
+    return <Redirect to="/" />
+  }
+
   render() {
     const { isAuthenticated } = this.props;
     return (
       <MDBNavbar className="blue-gradient container-fluid" dark expand="md">
         <MDBContainer>
           <MDBNavbarBrand>
-            <strong className="white-text">CodeQ</strong>
+            <Link to="/"> <strong className="text-white">CodeQ</strong> </Link>
           </MDBNavbarBrand>
           <MDBNavbarToggler onClick={this.toggleCollapse} />
           <MDBCollapse id="navbarCollapse3" isOpen={this.state.isOpen} navbar>
@@ -42,7 +52,7 @@ class NavBar extends Component {
                   <MDBNavLink to="/profile">Profile</MDBNavLink>
                 </MDBNavItem>
                 <MDBNavItem>
-                  <MDBNavLink to="/">Logout</MDBNavLink>
+                  <MDBNavLink to="#" onClick={this.logout}>Logout</MDBNavLink>
                 </MDBNavItem>
               </MDBNavbarNav>
             ) : (
@@ -62,4 +72,11 @@ class NavBar extends Component {
   }
 }
 
-export default NavBar;
+const mapDispatchToProps = (dispatch) => {
+  return {
+    logout: () =>
+      dispatch(actions.logout()),
+  };
+};
+
+export default withRouter(connect(null, mapDispatchToProps)(NavBar));

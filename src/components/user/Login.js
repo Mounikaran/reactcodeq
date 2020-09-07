@@ -1,6 +1,8 @@
 import React, { Component } from "react";
-import axios from "axios";
-
+// import axios from "axios";
+import { connect } from "react-redux";
+import { Redirect } from "react-router-dom";
+import * as actions from "../../store/actions/auth";
 import {
   MDBBtn,
   MDBCard,
@@ -10,6 +12,7 @@ import {
   MDBContainer,
   MDBIcon,
 } from "mdbreact";
+
 class Login extends Component {
   constructor() {
     super();
@@ -18,7 +21,7 @@ class Login extends Component {
         username: "",
         password: "",
       },
-      token: null,
+      // token: null,
       // user: {
       //   id: "",
       //   username: "",
@@ -29,23 +32,36 @@ class Login extends Component {
       //   is_staff: "",
       //   is_active: "",
       //   last_login: "",
-      //   date_joined: "",
+      //   date_joined: "",null
       // },
     };
   }
+  // login = (event) => {
+  //   event.preventDefault();
+  //   const data = this.state.credentials;
+  //   axios
+  //     .post("auth/", data)
+  //     .then((res) => res.data)
+  //     .then((res) =>
+  //       this.setState({
+  //         token: res.token,
+  //       })
+  //     )
+  //     .then((res) => this.props.userLogin(this.state.token))
+  //     .catch((error) => console.log(error));
+  // };
+
+  is_valid = (username, password) => {
+    if (username !== "" && password !== "") return true;
+    else return false;
+  };
+
   login = (event) => {
     event.preventDefault();
-    const data = this.state.credentials;
-    axios
-      .post("auth/", data)
-      .then((res) => res.data)
-      .then((res) =>
-        this.setState({
-          token: res.token,
-        })
-      )
-      .then((res) => this.props.userLogin(this.state.token))
-      .catch((error) => console.log(error));
+    event.target.className += " was-validated";
+    let { username, password } = this.state.credentials;
+    if (this.is_valid(username, password))
+      this.props.onAuth(username, password);
   };
 
   inputChanged = (event) => {
@@ -57,85 +73,117 @@ class Login extends Component {
   };
 
   render() {
+    let errormsg = null;
+    if (this.props.error) {
+      errormsg = this.props.error.message;
+    }
+    const { isAuthenticated } = this.props;
     return (
-      <MDBContainer fluid className="pt-md-4 px-0">
-        <div className="d-flex justify-content-center w-100 ">
-          <MDBCard style={{ width: "30rem" }}>
-            <MDBCardBody>
-              <div className="text-center">
-                <h3 className="dark-grey-text mb-5">
-                  <strong>Sign in</strong>
-                </h3>
-              </div>
-              <form onSubmit={this.login}>
-                {/* <MDBInput
-                label="Email Address"
-                group
-                type="email"
-                validate
-                error="wrong"
-                success="right"
-                name="email"
-              /> */}
-                <MDBInput
-                  label="Username"
-                  group
-                  type="text"
-                  validate
-                  error="wrong"
-                  success="right"
-                  name="username"
-                  onChange={this.inputChanged}
-                  value={this.state.credentials.username}
-                />
-                <MDBInput
-                  label="Password"
-                  group
-                  type="password"
-                  validate
-                  name="password"
-                  value={this.state.credentials.password}
-                  onChange={this.inputChanged}
-                  containerClass="mb-0"
-                />
-                <p className="font-small blue-text d-flex justify-content-end pb-3">
-                  Forgot
-                  <a href="#!" className="blue-text ml-1">
-                    Password?
-                  </a>
+      <MDBContainer fluid className="py-md-4 px-0">
+        {isAuthenticated ? (
+          <Redirect to="/" />
+        ) : (
+          <div className="d-flex justify-content-center w-100 ">
+            <MDBCard style={{ width: "30rem" }}>
+              <MDBCardBody>
+                <div className="text-center">
+                  <h3 className="dark-grey-text mb-5">
+                    <strong>Login</strong>
+                  </h3>
+                </div>
+                <form
+                  className="needs-validation"
+                  noValidate
+                  onSubmit={this.login}
+                >
+                  {/* <MDBInput
+                      label="Email Address"
+                      group
+                      type="email"
+                      validate
+                      error="wrong"
+                      success="right"
+                      name="email"
+                    /> */}
+                  <p className="text-center red-text">{errormsg}</p>
+                  <MDBInput
+                    required
+                    id="username"
+                    label="Username"
+                    group
+                    type="text"
+                    validate
+                    error="wrong"
+                    success="right"
+                    name="username"
+                    onChange={this.inputChanged}
+                    value={this.state.credentials.username}
+                  />
+                  <MDBInput
+                    label="Password"
+                    id="password"
+                    required
+                    group
+                    type="password"
+                    validate
+                    name="password"
+                    value={this.state.credentials.password}
+                    onChange={this.inputChanged}
+                    containerClass="mb-0"
+                  />
+                  <p className="font-small blue-text d-flex justify-content-end pb-3">
+                    Forgot
+                    <a href="#!" className="blue-text ml-1">
+                      Password?
+                    </a>
+                  </p>
+                  <div className="text-center mb-3">
+                    <MDBBtn
+                      gradient = "blue"                      
+                      className="btn-block"
+                      type="submit"
+                    >
+                      Login
+                    </MDBBtn>
+                  </div>
+                </form>
+                <p className="font-small dark-grey-text text-right d-flex justify-content-center mb-3 pt-2">
+                  or Sign in with:
                 </p>
-                <div className="text-center mb-3">
-                  <MDBBtn
-                    gradient="blue"
-                    className="btn-block z-depth-1a"
-                    type="submit"
-                  >
-                    Sign in
+                <div className="row my-3 d-flex justify-content-center">
+                  <MDBBtn type="button" color="white" className="z-depth-1a">
+                    <MDBIcon fab icon="google-plus-g" className="blue-text" />
                   </MDBBtn>
                 </div>
-              </form>
-              <p className="font-small dark-grey-text text-right d-flex justify-content-center mb-3 pt-2">
-                or Sign in with:
-              </p>
-              <div className="row my-3 d-flex justify-content-center">
-                <MDBBtn type="button" color="white" className="z-depth-1a">
-                  <MDBIcon fab icon="google-plus-g" className="blue-text" />
-                </MDBBtn>
-              </div>
-            </MDBCardBody>
-            <MDBModalFooter className="mx-5 pt-3 mb-1">
-              <p className="font-small grey-text d-flex justify-content-end">
-                Not a member?
-                <a href={"/register"} className="blue-text ml-1">
-                  Sign Up
-                </a>
-              </p>
-            </MDBModalFooter>
-          </MDBCard>
-        </div>
+              </MDBCardBody>
+              <MDBModalFooter className="mx-5 pt-3 mb-1">
+                <p className="font-small grey-text d-flex justify-content-end">
+                  Not a member?
+                  <a href={"/register"} className="blue-text ml-1">
+                    Sign Up
+                  </a>
+                </p>
+              </MDBModalFooter>
+            </MDBCard>
+          </div>
+        )}
       </MDBContainer>
     );
   }
 }
 
-export default Login;
+const mapStateToProps = (state) => {
+  return {
+    loading: state.loading,
+    error: state.error,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onAuth: (username, password) =>
+      dispatch(actions.authLogin(username, password)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);
