@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-// import axios from "axios";
 import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
 import * as actions from "../../store/actions/auth";
@@ -21,35 +20,12 @@ class Login extends Component {
         username: "",
         password: "",
       },
-      // token: null,
-      // user: {
-      //   id: "",
-      //   username: "",
-      //   first_name: "",
-      //   last_name: "",
-      //   email: "",
-      //   is_superuser: "",
-      //   is_staff: "",
-      //   is_active: "",
-      //   last_login: "",
-      //   date_joined: "",null
-      // },
     };
   }
-  // login = (event) => {
-  //   event.preventDefault();
-  //   const data = this.state.credentials;
-  //   axios
-  //     .post("auth/", data)
-  //     .then((res) => res.data)
-  //     .then((res) =>
-  //       this.setState({
-  //         token: res.token,
-  //       })
-  //     )
-  //     .then((res) => this.props.userLogin(this.state.token))
-  //     .catch((error) => console.log(error));
-  // };
+
+  componentDidMount() {
+    if (this.props.isAuthenticated) this.props.loadUser();
+  }
 
   is_valid = (username, password) => {
     if (username !== "" && password !== "") return true;
@@ -138,11 +114,7 @@ class Login extends Component {
                     </a>
                   </p>
                   <div className="text-center mb-3">
-                    <MDBBtn
-                      gradient = "blue"                      
-                      className="btn-block"
-                      type="submit"
-                    >
+                    <MDBBtn gradient="blue" className="btn-block" type="submit">
                       Login
                     </MDBBtn>
                   </div>
@@ -183,6 +155,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     onAuth: (username, password) =>
       dispatch(actions.authLogin(username, password)),
+    loadUser: () => dispatch(actions.loadUser()),
   };
 };
 

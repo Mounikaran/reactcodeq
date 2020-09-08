@@ -5,6 +5,7 @@ const initialState = {
   token: null,
   error: null,
   loading: false,
+  user: null,
 };
 
 const authStart = (state, action) => {
@@ -22,6 +23,28 @@ const authSuccess = (state, action) => {
   });
 };
 
+const userLoading = (state, action) => {
+  return updateObject(state, {
+    loading: true,
+    error: null,
+  });
+};
+
+const userLoaded = (state, action) => {
+  return updateObject(state, {
+    user : action.user,
+    token : action.token,
+    loading : false,
+  });
+};
+
+const userLoadFail = (state, action) => {
+  return updateObject(state, {
+    error: action.error,
+    loading: false,
+  });
+};
+
 const authFail = (state, action) => {
   return updateObject(state, {
     error: action.error,
@@ -32,6 +55,7 @@ const authFail = (state, action) => {
 const authLogout = (state, action) => {
   return updateObject(state, {
     token: null,
+    user : null,
   });
 };
 
@@ -41,6 +65,12 @@ const reducer = (state = initialState, action) => {
       return authStart(state, action);
     case actionTypes.AUTH_SUCCESS:
       return authSuccess(state, action);
+    case actionTypes.USER_LOADING:
+      return userLoading(state, action);
+    case actionTypes.USER_LOADED:
+      return userLoaded(state, action);
+    case actionTypes.USER_LOADFAIL:
+      return userLoadFail(state, action);
     case actionTypes.AUTH_FAIL:
       return authFail(state, action);
     case actionTypes.AUTH_LOGOUT:

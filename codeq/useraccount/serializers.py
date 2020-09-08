@@ -17,6 +17,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
             "last_login",
             "date_joined",
         ]
+        lookup_field = 'username'
         
 
 class GroupSerializer(serializers.HyperlinkedModelSerializer):

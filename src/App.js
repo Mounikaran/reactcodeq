@@ -13,6 +13,11 @@ import * as actions from "./store/actions/auth";
 axios.defaults.baseURL = "http://127.0.0.1:8000/";
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {}
+  }
+
   componentDidMount() {
     this.props.onTryAutoSignup();
   }
@@ -35,6 +40,8 @@ class App extends Component {
 const mapStateToProps = (state) => {
   return {
     isAuthenticated: state.token !== null,
+    token: state.token,
+    user: JSON.parse(state.user),
   };
 };
 

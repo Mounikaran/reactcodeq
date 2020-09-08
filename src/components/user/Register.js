@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-// import axios from "axios";
 import { connect } from "react-redux";
 import * as actions from "../../store/actions/auth";
 import {
@@ -25,6 +24,10 @@ class Register extends Component {
       match: false,
       matchmsg: "",
     };
+  }
+
+  componentDidMount() {
+    if (this.props.isAuthenticated) this.props.loadUser();
   }
 
   inputChanged = (event) => {
@@ -204,6 +207,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     onAuth: (username, email, password1, password2) =>
       dispatch(actions.authSignup(username, email, password1, password2)),
+    loadUser: () => dispatch(actions.loadUser()),
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Register);
