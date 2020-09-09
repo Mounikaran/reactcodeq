@@ -36,7 +36,7 @@ class NavBar extends Component {
   render() {
     const { isAuthenticated } = this.props;
     return (
-      <MDBNavbar className="blue-gradient container-fluid" dark expand="md">
+      <MDBNavbar className="blue-gradient container-fluid sticky-top" dark expand="md">
         <MDBContainer>
           <MDBNavbarBrand>
             <Link to="/"> <strong className="text-white">CodeQ</strong> </Link>
