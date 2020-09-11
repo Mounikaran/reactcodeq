@@ -1,10 +1,14 @@
 import React, { Component } from "react";
 import { Switch, Route } from "react-router-dom";
 
-import Login from "./components/user/Login";
+import Login from "./components/account/Login";
 import HomePage from "./components/HomePage";
-import Register from "./components/user/Register";
+import Register from "./components/account/Register";
 import Profile from "./components/user/Profile";
+import PasswordReset from './components/account/PasswordReset'
+import PasswordResetChange from './components/account/PasswordResetChange'
+import EmailSent from "./components/account/EmailSent";
+
 
 class Routes extends Component {
   constructor(props) {
@@ -29,7 +33,17 @@ class Routes extends Component {
           path="/profile"
           component={() => <Profile {...this.props} />}
         />
+
+        {/* Password Reset Router */}
+
+        <Route exact path="/password/reset/" component={PasswordReset} />
+        <Route exact path="/email-has-been-sent/" component={EmailSent} />
+        <Route exact path="/reset/:uid/:token/" component={PasswordResetChange} />
+
+
+        {/* HomePage  */}
         <Route exact path="/" component={() => <HomePage {...this.props} />} />
+
       </Switch>
     );
   }

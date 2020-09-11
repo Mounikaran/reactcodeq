@@ -45,6 +45,28 @@ const userLoadFail = (state, action) => {
   });
 };
 
+const userUpdating = (state, action) => {
+  return updateObject(state, {
+    loading: true,
+    error: null,
+  });
+};
+
+const userUpdated = (state, action) => {
+  return updateObject(state, {
+    user : action.user,
+    token : action.token,
+    loading : false,
+  });
+};
+
+const userUpdateFail = (state, action) => {
+  return updateObject(state, {
+    error: action.error,
+    loading: false,
+  });
+};
+
 const authFail = (state, action) => {
   return updateObject(state, {
     error: action.error,
@@ -71,6 +93,12 @@ const reducer = (state = initialState, action) => {
       return userLoaded(state, action);
     case actionTypes.USER_LOADFAIL:
       return userLoadFail(state, action);
+    case actionTypes.USER_UPDATING:
+      return userUpdating(state, action);
+    case actionTypes.USER_UPDATED:
+      return userUpdated(state, action);
+    case actionTypes.USER_UPDATEFAIL:
+      return userUpdateFail(state, action);
     case actionTypes.AUTH_FAIL:
       return authFail(state, action);
     case actionTypes.AUTH_LOGOUT:

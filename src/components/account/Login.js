@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Redirect } from "react-router-dom";
+import { Redirect, Link } from "react-router-dom";
 import * as actions from "../../store/actions/auth";
 import {
   MDBBtn,
@@ -107,12 +107,11 @@ class Login extends Component {
                     onChange={this.inputChanged}
                     containerClass="mb-0"
                   />
-                  <p className="font-small blue-text d-flex justify-content-end pb-3">
-                    Forgot
-                    <a href="#!" className="blue-text ml-1">
-                      Password?
-                    </a>
-                  </p>
+                  <Link to="/password/reset/">
+                    <p className="font-small blue-text d-flex justify-content-end pb-3">
+                      Forgot Password?
+                    </p>
+                  </Link>
                   <div className="text-center mb-3">
                     <MDBBtn gradient="blue" className="btn-block" type="submit">
                       Login

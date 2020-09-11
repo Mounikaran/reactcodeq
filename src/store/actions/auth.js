@@ -35,6 +35,29 @@ export const userLoadFail = (error) => {
   };
 };
 
+
+export const userUpdating = () => {
+  return {
+    type: actionTypes.USER_UPDATING,
+  }
+}
+
+export const userUpdated = (user, token) => {
+  return {
+    type : actionTypes.USER_UPDATED,
+    user: user,
+    token : token,
+  }
+}
+export const userUpdateFail = (error) => {
+  return {
+    type: actionTypes.USER_UPDATEFAIL,
+    error: error,
+  };
+};
+
+
+
 export const authFail = (error) => {
   return {
     type: actionTypes.AUTH_FAIL,
@@ -129,6 +152,32 @@ export const loadUser = () => {
         })
         .catch((error) => {
           dispatch(userLoadFail(error));
+        });
+    }
+  };
+};
+export const updateUser = (userData) => {
+  return (dispatch) => {
+    dispatch(userUpdating());
+    const token = localStorage.getItem("token");
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (token) {
+      axios.defaults.headers = {
+        "Content-Type": "application/json",
+        Authorization: `Token ${token}`,
+      };
+      axios
+        .put(`http://127.0.0.1:8000/account/users/${user.username}/`, userData)
+        .then((res) => {
+          const userUpdate = JSON.stringify(userData);
+          const expirationDate = new Date(new Date().getTime() + 3600 * 1000);
+          localStorage.setItem("user", userUpdate);
+          localStorage.setItem("expirationDate", expirationDate);
+          dispatch(userUpdated(userUpdate, token));
+          dispatch(checkAuthTimeout(3600));
+        })
+        .catch((error) => {
+          dispatch(userUpdateFail(error));
         });
     }
   };

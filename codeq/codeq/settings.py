@@ -174,9 +174,13 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
+# email configuration.,
+
+
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
+EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'mounikaranr.17msc@kongu.edu'
-EMAIL_HOST_PASSWORD = 'Mounikaran.edu'
+DEFAULT_FROM_EMAIL = 'CodeQ <mk@codeq.com>'
+EMAIL_HOST_PASSWORD = 'igqalizclrvstydz'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

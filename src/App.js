@@ -15,11 +15,24 @@ axios.defaults.baseURL = "http://127.0.0.1:8000/";
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = {}
+    this.state = {
+      in_reset: false,
+    };
   }
 
   componentDidMount() {
     this.props.onTryAutoSignup();
+    // const url = window.location.href;
+    // const reset = "http://localhost:3000/password/";
+    // if (url.includes(reset)) {
+    //   this.setState({
+    //     in_reset: true,
+    //   });
+    // } else {
+    //   this.setState({
+    //     in_reset: false,
+    //   });
+    // }
   }
 
   render() {
@@ -31,7 +44,7 @@ class App extends Component {
             <Routes {...this.props} />
           </main>
         </BrowserRouter>
-        <Footer />
+        {this.state.in_reset ? "" : <Footer />}
       </Fragment>
     );
   }

@@ -51,6 +51,7 @@ class Register extends Component {
       });
     } else {
       this.setState({
+        match: false,
         matchmsg: "Not Matching",
       });
     }
