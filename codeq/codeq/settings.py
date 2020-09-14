@@ -60,6 +60,7 @@ INSTALLED_APPS = [
 
     'useraccount',
     'post',
+    'tags',
 ]
 
 SITE_ID = 1
