@@ -14,7 +14,7 @@ def create_favorites(sender, instance, created, **kwargs):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    profile_pic = models.ImageField(upload_to='profile_pics', default="default_img.png")
+    profile_pic = models.ImageField(upload_to='profiles', default="default_img.png")
     tags = models.ManyToManyField(
         'tags.Tag', related_name='user_tags', blank=True)
 

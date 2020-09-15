@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
-import { connect } from 'react-redux';
+import { connect } from "react-redux";
 import * as actions from "../../store/actions/auth";
 import {
   MDBContainer,
@@ -32,6 +32,7 @@ class Profile extends Component {
         email: "",
       },
       modal: false,
+      deletemodal: false,
       match: false,
       matchmsg: "",
       responce: null,
@@ -95,10 +96,29 @@ class Profile extends Component {
       modal: !this.state.modal,
     });
   };
+  deleteModalToggle = () => {
+    this.setState({
+      deletemodal: !this.state.deletemodal,
+    });
+  };
 
   handleUpdate = (e) => {
     e.preventDefault();
     this.props.onUpdate(this.state.user);
+  };
+
+  handleDelete = (e) => {
+    e.preventDefault();
+    if (this.props.token) {
+      axios.defaults.headers = {
+        "Content-Type": "application/json",
+        Authorization: `Token ${this.props.token}`,
+      };
+      axios
+        .delete(`account/users/${this.props.user.username}`)
+        .then((res) => this.props.logout())
+        .catch(err => console.log(err));
+    }
   };
 
   handleChangePassword = (e) => {
@@ -195,7 +215,6 @@ class Profile extends Component {
                         <MDBCol md="6" sm="12" lg="6">
                           <MDBInput
                             label="First Name"
-                            
                             name="first_name"
                             type="text"
                             value={this.state.user.first_name}
@@ -206,7 +225,6 @@ class Profile extends Component {
                         <MDBCol md="6" sm="12" lg="6">
                           <MDBInput
                             label="Last Name"
-                            
                             name="last_name"
                             type="text"
                             value={this.state.user.last_name}
@@ -217,7 +235,6 @@ class Profile extends Component {
                         <MDBCol md="12" sm="12" lg="12">
                           <MDBInput
                             label="Email Address"
-                            
                             name="email"
                             type="text"
                             value={this.state.user.email}
@@ -245,13 +262,66 @@ class Profile extends Component {
                 )}
               </MDBCardBody>
             </MDBCard>
-            <MDBCard className="my-md-3">
+            <MDBCard className="my-3">
               <MDBCardBody></MDBCardBody>
             </MDBCard>
+            <MDBRow className="mb-2">
+              <MDBCol size="12">
+                <MDBCard>
+                  <MDBCardBody>
+                    <div className="d-flex justify-content-between">
+                      <div>
+                        {" "}
+                        <p className="text-muted">Delete Account</p>{" "}
+                      </div>
+                      <div>
+                        {" "}
+                        <MDBBtn
+                          size="sm"
+                          onClick={this.deleteModalToggle}
+                          color="red lighten-2"
+                        >
+                          {" "}
+                          Delete{" "}
+                        </MDBBtn>{" "}
+                      </div>
+                    </div>
+                  </MDBCardBody>
+                </MDBCard>
+              </MDBCol>
+            </MDBRow>
           </MDBCol>
         </MDBRow>
 
         {/* modal */}
+
+        {/* delete account modal */}
+        <MDBModal
+          isOpen={this.state.deletemodal}
+          toggle={this.deleteModalToggle}
+          centered
+        >
+          <MDBModalBody>
+            <form onSubmit={this.handleDelete}>
+              Are You Sure About <strong>Delete</strong> your Account ?
+              <div className="py-2 text-center">
+                <MDBBtn size="sm" type="submit" color="red" outline>
+                  Delete
+                </MDBBtn>
+                <MDBBtn
+                  size="sm"
+                  type="button"
+                  onClick={this.deleteModalToggle}
+                  color="green"
+                >
+                  No
+                </MDBBtn>
+              </div>
+            </form>
+          </MDBModalBody>
+        </MDBModal>
+
+        {/* Password change modal */}
         <MDBModal isOpen={this.state.modal} toggle={this.modalToggle} centered>
           <MDBModalHeader toggle={this.modalToggle}>
             Change Password
@@ -311,6 +381,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     onUpdate: (userData) => dispatch(actions.updateUser(userData)),
     loadUser: () => dispatch(actions.loadUser()),
+    logout: () => dispatch(actions.logout()),
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Profile);
