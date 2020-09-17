@@ -8,7 +8,7 @@ import NavBar from "./components/layouts/NavBar";
 import Footer from "./components/layouts/Footer";
 import Routes from "./Routes";
 
-import * as actions from "./store/actions/auth";
+import * as actions from "./store/actions/actions";
 
 axios.defaults.baseURL = "http://127.0.0.1:8000/";
 
@@ -55,6 +55,7 @@ const mapStateToProps = (state) => {
     isAuthenticated: state.token !== null,
     token: state.token,
     user: JSON.parse(state.user),
+    profile : JSON.parse(state.profile),
   };
 };
 

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { connect } from "react-redux";
-import * as actions from "../../store/actions/auth";
+import * as actions from "../../store/actions/actions";
 import {
   MDBContainer,
   MDBRow,
@@ -26,12 +26,12 @@ class Profile extends Component {
         new_password1: "",
         new_password2: "",
       },
-      user: {
-        first_name: "",
-        last_name: "",
-        email: "",
-      },
+      user: {},
+      profile: {},
+      preview : null,
+      image: null,
       modal: false,
+      uploadmodal: false,
       deletemodal: false,
       match: false,
       matchmsg: "",
@@ -44,6 +44,8 @@ class Profile extends Component {
     if (this.props.user) {
       this.setState({
         user: this.props.user,
+        profile: this.props.profile,
+        preview: this.props.profile.profile_pic,
       });
     }
   }
@@ -85,12 +87,24 @@ class Profile extends Component {
     }
   };
 
+  handleImageChange = (e) => {
+    this.setState({
+      preview : URL.createObjectURL(e.target.files[0]),
+      image: e.target.files[0],
+    });
+  };
+
   editedToggle = () => {
     this.setState({
       edited: !this.state.edited,
     });
   };
 
+  uploadModal = () => {
+    this.setState({
+      uploadmodal: !this.state.uploadmodal,
+    });
+  };
   modalToggle = () => {
     this.setState({
       modal: !this.state.modal,
@@ -117,7 +131,7 @@ class Profile extends Component {
       axios
         .delete(`account/users/${this.props.user.username}`)
         .then((res) => this.props.logout())
-        .catch(err => console.log(err));
+        .catch((err) => console.log(err));
     }
   };
 
@@ -141,9 +155,21 @@ class Profile extends Component {
     }
   };
 
+  handleProfileUpdate = (e) => {
+    e.preventDefault();
+    let form_data = new FormData();
+    form_data.append("profile_pic", this.state.image, this.state.image.name);
+    form_data.append('user', this.props.user.pk);
+    form_data.append('tag', this.state.tag)
+    if (this.props.token) {
+      const username = this.state.user.username;
+      this.props.updateProfile(username, this.props.token, form_data);
+    }
+  };
+
   render() {
     const { user } = this.props;
-    const { responce } = this.state;
+    const { responce, profile } = this.state;
     return (
       <MDBContainer className="container-md">
         <MDBRow className="pt-md-4 pt-2 px-0">
@@ -155,12 +181,14 @@ class Profile extends Component {
                     <MDBView zoom className="w-100">
                       <MDBCardImage
                         className="img-fluid"
-                        src="https://cdn.jpegmini.com/user/images/slider_puffin_jpegmini_mobile.jpg"
+                        src={`${profile.profile_pic}`}
                         waves
                       />
                     </MDBView>
                     <MDBCardBody>
-                      <MDBBtn href="#">Change Profile Picture</MDBBtn>
+                      <MDBBtn onClick={this.uploadModal}>
+                        Change Profile Picture
+                      </MDBBtn>
                     </MDBCardBody>
                   </MDBCard>
                 </div>
@@ -295,6 +323,50 @@ class Profile extends Component {
 
         {/* modal */}
 
+        {/* image upload modal */}
+        <MDBModal
+          isOpen={this.state.uploadmodal}
+          toggle={this.uploadModal}
+          centered
+        >
+          <MDBModalBody className="p-md-5">
+            <div className="d-flex p-1 justify-content-center">
+              <MDBCard className="w-50">
+                <MDBCardImage
+                  className="img-fluid"
+                  src={`${this.state.preview}`}
+                />
+              </MDBCard>
+            </div>
+            <form onSubmit={this.handleProfileUpdate}>
+              <div className="md-form">
+                <label htmlFor="image">Upload Profile Picture</label>
+                <input
+                  type="file"
+                  id="image"
+                  name="image"
+                  onChange={this.handleImageChange}
+                />
+              </div>
+
+              <div className="text-center pt-4">
+                <MDBBtn type="submit" color="green accent-3" size="sm">
+                  Change
+                </MDBBtn>
+                <MDBBtn
+                  type="button"
+                  onClick={this.uploadModal}
+                  outline
+                  color="red darken-3"
+                  size="sm"
+                >
+                  Cancel
+                </MDBBtn>
+              </div>
+            </form>
+          </MDBModalBody>
+        </MDBModal>
+
         {/* delete account modal */}
         <MDBModal
           isOpen={this.state.deletemodal}
@@ -380,6 +452,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     onUpdate: (userData) => dispatch(actions.updateUser(userData)),
+    updateProfile : (username, token, form_data) => dispatch(actions.updateProfile(username, token, form_data)),
     loadUser: () => dispatch(actions.loadUser()),
     logout: () => dispatch(actions.logout()),
   };

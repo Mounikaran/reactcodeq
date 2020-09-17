@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Redirect, Link } from "react-router-dom";
-import * as actions from "../../store/actions/auth";
+import * as actions from "../../store/actions/actions";
 import {
   MDBBtn,
   MDBCard,
@@ -24,7 +24,9 @@ class Login extends Component {
   }
 
   componentDidMount() {
-    if (this.props.isAuthenticated) this.props.loadUser();
+    if (this.props.isAuthenticated) {
+      this.props.loadUser();
+    }
   }
 
   is_valid = (username, password) => {

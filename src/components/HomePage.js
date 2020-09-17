@@ -9,7 +9,7 @@ import {
   MDBCard,
   MDBCardBody,
 } from "mdbreact";
-// import * as actions from "../store/actions/auth";
+// import * as actions from "../store/actions/actions";
 
 class HomePage extends Component {
   constructor(props) {

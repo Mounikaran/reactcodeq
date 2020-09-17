@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import * as actions from "../../store/actions/auth";
+import * as actions from "../../store/actions/actions";
 import {
   MDBContainer,
   MDBCard,
@@ -27,7 +27,9 @@ class Register extends Component {
   }
 
   componentDidMount() {
-    if (this.props.isAuthenticated) this.props.loadUser();
+    if (this.props.isAuthenticated) {
+      this.props.loadUser();
+    }
   }
 
   inputChanged = (event) => {
