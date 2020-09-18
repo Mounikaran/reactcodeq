@@ -22,6 +22,7 @@ class App extends Component {
 
   componentDidMount() {
     this.props.onTryAutoSignup();
+    this.props.onLoadTags();
     // const url = window.location.href;
     // const reset = "http://localhost:3000/password/";
     // if (url.includes(reset)) {
@@ -56,12 +57,14 @@ const mapStateToProps = (state) => {
     token: state.token,
     user: JSON.parse(state.user),
     profile : JSON.parse(state.profile),
+    tags : state.tags,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     onTryAutoSignup: () => dispatch(actions.authCheckState()),
+    onLoadTags: () => dispatch(actions.loadTags()),
   };
 };
 

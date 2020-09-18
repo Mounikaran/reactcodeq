@@ -33,9 +33,9 @@ const userLoading = (state, action) => {
 
 const userLoaded = (state, action) => {
   return updateObject(state, {
-    user : action.user,
-    token : action.token,
-    loading : false,
+    user: action.user,
+    token: action.token,
+    loading: false,
   });
 };
 
@@ -55,9 +55,9 @@ const userUpdating = (state, action) => {
 
 const userUpdated = (state, action) => {
   return updateObject(state, {
-    user : action.user,
-    token : action.token,
-    loading : false,
+    user: action.user,
+    token: action.token,
+    loading: false,
   });
 };
 
@@ -78,10 +78,9 @@ const authFail = (state, action) => {
 const authLogout = (state, action) => {
   return updateObject(state, {
     token: null,
-    user : null,
+    user: null,
   });
 };
-
 
 const profileLoading = (state, action) => {
   return updateObject(state, {
@@ -107,26 +106,49 @@ const profileFail = (state, action) => {
 
 const profileUpdating = (state, action) => {
   return updateObject(state, {
-    loading : true,
-    error : null,
-  })
-}
+    loading: true,
+    error: null,
+  });
+};
 
 const profileUpdated = (state, action) => {
   return updateObject(state, {
-    loading: false, 
-    error: null, 
+    loading: false,
+    error: null,
     profile: action.profile,
-  })
-}
+  });
+};
 
 const profileUpdateFail = (state, action) => {
   return updateObject(state, {
-    loading : false,
+    loading: false,
     error: action.error,
-  })
-}
+  });
+};
 
+// tags
+
+const tagsLoading = (state, action) => {
+  return updateObject(state, {
+    loading: true,
+    error: null,
+  });
+};
+
+const tagsLoaded = (state, action) => {
+  return updateObject(state, {
+    loading: false,
+    tags: action.tags,
+    error: null,
+  });
+};
+
+const tagsLoadFail = (state, action) => {
+  return updateObject(state, {
+    loading: false,
+    error: action.error,
+  });
+};
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
@@ -166,6 +188,13 @@ const reducer = (state = initialState, action) => {
       return profileUpdated(state, action);
     case actionTypes.PROFILE_UPDATE_FAIL:
       return profileUpdateFail(state, action);
+
+    case actionTypes.TAGS_LOADING:
+      return tagsLoading(state, action);
+    case actionTypes.TAGS_LOADED:
+      return tagsLoaded(state, action);
+    case actionTypes.TAGS_LOAD_FAIL:
+      return tagsLoadFail(state, action);
 
     default:
       return state;

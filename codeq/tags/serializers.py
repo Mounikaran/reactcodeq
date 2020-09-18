@@ -6,4 +6,4 @@ class TagSerializer(ModelSerializer):
     class Meta:
         model = Tag
         fields = "__all__"
-        
+        lookup_field = 'name'

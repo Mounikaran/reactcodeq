@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import Select from "react-select";
 import axios from "axios";
 import { connect } from "react-redux";
 import * as actions from "../../store/actions/actions";
@@ -16,6 +17,7 @@ import {
   MDBModal,
   MDBModalBody,
   MDBModalHeader,
+  MDBBadge,
 } from "mdbreact";
 
 class Profile extends Component {
@@ -28,7 +30,7 @@ class Profile extends Component {
       },
       user: {},
       profile: {},
-      preview : null,
+      preview: null,
       image: null,
       modal: false,
       uploadmodal: false,
@@ -37,6 +39,9 @@ class Profile extends Component {
       matchmsg: "",
       responce: null,
       edited: true,
+      adding_tag: false,
+      tags : [],
+      options: [],
     };
   }
 
@@ -44,8 +49,21 @@ class Profile extends Component {
     if (this.props.user) {
       this.setState({
         user: this.props.user,
+      });
+    }
+    if (this.props.profile) {
+      this.setState({
         profile: this.props.profile,
         preview: this.props.profile.profile_pic,
+      });
+    }
+    if (this.props.tags) {
+      const options = [];
+      this.props.tags.forEach((tag) => {
+        options.push({ label: tag.name, value: tag.name });
+      });
+      this.setState({
+        options: options,
       });
     }
   }
@@ -89,11 +107,16 @@ class Profile extends Component {
 
   handleImageChange = (e) => {
     this.setState({
-      preview : URL.createObjectURL(e.target.files[0]),
+      preview: URL.createObjectURL(e.target.files[0]),
       image: e.target.files[0],
     });
   };
 
+  handleAdd = () => {
+    this.setState({
+      adding_tag: !this.state.adding_tag,
+    });
+  };
   editedToggle = () => {
     this.setState({
       edited: !this.state.edited,
@@ -120,6 +143,12 @@ class Profile extends Component {
     e.preventDefault();
     this.props.onUpdate(this.state.user);
   };
+
+  changeTags = (value) => {
+    this.setState({
+      tags : value,
+    })
+  }
 
   handleDelete = (e) => {
     e.preventDefault();
@@ -155,12 +184,22 @@ class Profile extends Component {
     }
   };
 
+  handleAddTag = (e) => {
+    e.preventDefault();
+    const options = [];
+    this.state.tags.forEach((tag) => {
+      options.push({name : tag.value});
+    });
+    console.log(options);
+  }
+
   handleProfileUpdate = (e) => {
     e.preventDefault();
     let form_data = new FormData();
-    form_data.append("profile_pic", this.state.image, this.state.image.name);
-    form_data.append('user', this.props.user.pk);
-    form_data.append('tag', this.state.tag)
+    if (this.state.image)
+      form_data.append("profile_pic", this.state.image, this.state.image.name);
+    form_data.append("user", this.props.user.pk);
+    form_data.append("tag", this.state.profile.tag);
     if (this.props.token) {
       const username = this.state.user.username;
       this.props.updateProfile(username, this.props.token, form_data);
@@ -170,6 +209,7 @@ class Profile extends Component {
   render() {
     const { user } = this.props;
     const { responce, profile } = this.state;
+
     return (
       <MDBContainer className="container-md">
         <MDBRow className="pt-md-4 pt-2 px-0">
@@ -291,7 +331,60 @@ class Profile extends Component {
               </MDBCardBody>
             </MDBCard>
             <MDBCard className="my-3">
-              <MDBCardBody></MDBCardBody>
+              <MDBCardBody>
+                <strong className="grey-text">Your Tags</strong>
+                <div className="row">
+                  <div className="col-8">
+                    {profile.tag
+                      ? profile.tag.map((tag, index) => (
+                          <MDBBadge
+                            pill
+                            key={index}
+                            className="aqua-gradient p-2 m-1"
+                          >
+                            {tag.name}
+                          </MDBBadge>
+                        ))
+                      : ""}
+                  </div>
+                  <div className="col-2">
+                    {this.state.adding_tag ? (
+                      ""
+                    ) : (
+                      <MDBBtn
+                        size="sm"
+                        className=""
+                        onClick={this.handleAdd}
+                        color="blue-grey"
+                      >
+                        Add
+                      </MDBBtn>
+                    )}
+                  </div>
+                </div>
+                {this.state.adding_tag ? (
+                  <div>
+                    <form onSubmit={this.handleAddTag}>
+                      <Select
+                        options={this.state.options}
+                        onChange={this.changeTags}
+                        isMulti
+                      />
+                      <MDBBtn
+                        size="sm"
+                        className="float-right"
+                        type="submit"
+                        color="dark-green"
+                      >
+                        {" "}
+                        Update{" "}
+                      </MDBBtn>
+                    </form>
+                  </div>
+                ) : (
+                  " "
+                )}
+              </MDBCardBody>
             </MDBCard>
             <MDBRow className="mb-2">
               <MDBCol size="12">
@@ -452,7 +545,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     onUpdate: (userData) => dispatch(actions.updateUser(userData)),
-    updateProfile : (username, token, form_data) => dispatch(actions.updateProfile(username, token, form_data)),
+    updateProfile: (username, token, form_data) =>
+      dispatch(actions.updateProfile(username, token, form_data)),
     loadUser: () => dispatch(actions.loadUser()),
     logout: () => dispatch(actions.logout()),
   };

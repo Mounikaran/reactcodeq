@@ -300,3 +300,43 @@ export const updateProfile = (username, token, data) => {
     }
   };
 };
+
+// Tags
+
+export const tagsLoading = () => {
+  return {
+    type: actionTypes.TAGS_LOADING,
+  };
+};
+
+export const tagsLoaded = (tags) => {
+  return {
+    type: actionTypes.TAGS_LOADED,
+    tags: tags,
+  };
+};
+
+export const tagsLoadFail = (error) => {
+  return {
+    type: actionTypes.TAGS_LOAD_FAIL,
+    error: error,
+  };
+};
+
+export const loadTags = () => {
+  return (dispatch) => {
+    dispatch(tagsLoading());
+    axios
+      .get("http://127.0.0.1:8000/tags/")
+      .then((res) => {
+        const tags = res.data;
+        const expirationDate = new Date(new Date().getTime() + 3600 * 1000);
+        localStorage.setItem("tags", tags);
+        localStorage.setItem("expirationDate", expirationDate);
+        dispatch(tagsLoaded(tags));
+      })
+      .catch((error) => {
+        dispatch(tagsLoadFail(error));
+      });
+  };
+};

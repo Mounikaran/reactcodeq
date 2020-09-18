@@ -24,11 +24,14 @@ from django.views.generic import TemplateView
 urlpatterns = [
     # custom homepage
     path('',TemplateView.as_view(template_name = 'index.html')),
+    
     # admin url
     path('admin/', admin.site.urls),
+
     # apps urls
     path('account/', include('useraccount.urls')),
     path('post/', include('post.urls')),
+    path('tags/', include('tags.urls')),
 
     # rest framwork auth urls
     # path('api-auth-token/', obtain_auth_token, name='api-auth-token'),

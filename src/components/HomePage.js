@@ -8,18 +8,18 @@ import {
   MDBCol,
   MDBCard,
   MDBCardBody,
+  MDBBadge,
 } from "mdbreact";
 // import * as actions from "../store/actions/actions";
 
 class HomePage extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {}
   }
 
   render() {
-    const { isAuthenticated, user } = this.props;
-
+    const { isAuthenticated, user} = this.props;
     return (
       <div>
         <MDBJumbotron fluid className="my-0">
@@ -30,7 +30,16 @@ class HomePage extends Component {
             ) : (
               <h4>Hey, Try to Login * </h4>
             )}
-            <p className="lead">This is the HomePage of CodeQ</p>
+            <p>This is the HomePage of CodeQ</p>
+            
+              {this.props.tags
+                ? this.props.tags.map((tag, index) => (
+                    <MDBBadge pill key={index} className="hoverable aqua-gradient p-2 m-1">
+                      {tag.name}
+                    </MDBBadge>
+                  ))
+                : ""}
+            
           </MDBContainer>
         </MDBJumbotron>
         <MDBContainer className="py-md-4 container-md">
