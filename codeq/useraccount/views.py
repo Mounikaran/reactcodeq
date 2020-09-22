@@ -22,6 +22,8 @@ class ProfileViewSet(viewsets.ModelViewSet):
     lookup_field = 'slug'
     permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
 
+
+
 class GroupViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows groups to be viewed or edited.

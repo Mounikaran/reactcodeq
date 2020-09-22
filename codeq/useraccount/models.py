@@ -5,9 +5,11 @@ from django.dispatch import receiver
 import os
 
 from autoslug import AutoSlugField
+from multiselectfield import MultiSelectField
+
+from .tag_choices import TAGS
 
 # Create your models here.
-
 
 @receiver(post_save, sender=User)
 def create_favorites(sender, instance, created, **kwargs):
@@ -19,8 +21,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     profile_pic = models.ImageField(upload_to='profiles', default="default_img.png")
     slug = AutoSlugField(populate_from='user', blank=True)
-    tag = models.ManyToManyField(
-        'tags.Tag', related_name='user_tags', blank=True, default="")
+    tag = MultiSelectField(choices=TAGS, null=True, default="")
 
     def __str__(self):
         return self.user.username

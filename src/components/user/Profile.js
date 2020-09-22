@@ -30,6 +30,7 @@ class Profile extends Component {
       },
       user: {},
       profile: {},
+      user_tags : [],
       preview: null,
       image: null,
       modal: false,
@@ -40,7 +41,7 @@ class Profile extends Component {
       responce: null,
       edited: true,
       adding_tag: false,
-      tags : [],
+      tags: [],
       options: [],
     };
   }
@@ -58,9 +59,20 @@ class Profile extends Component {
       });
     }
     if (this.props.tags) {
+      if (this.props.profile.tag){
+        let temp = []
+        this.props.profile.tag.forEach(tag => {
+           temp.push(this.props.tags.find(obj => {
+            return obj.id === tag;
+          }));
+          this.setState({
+            user_tags : temp,
+          })
+        });
+      }
       const options = [];
       this.props.tags.forEach((tag) => {
-        options.push({ label: tag.name, value: tag.name });
+        options.push({ label: tag.name, value: tag.id });
       });
       this.setState({
         options: options,
@@ -146,9 +158,9 @@ class Profile extends Component {
 
   changeTags = (value) => {
     this.setState({
-      tags : value,
-    })
-  }
+      tags: value,
+    });
+  };
 
   handleDelete = (e) => {
     e.preventDefault();
@@ -187,19 +199,24 @@ class Profile extends Component {
   handleAddTag = (e) => {
     e.preventDefault();
     const options = [];
-    this.state.tags.forEach((tag) => {
-      options.push({name : tag.value});
+    // const { tag } = this.state.profile;
+    this.state.tags.forEach((t) => {
+      options.push(t.value);
     });
-    console.log(options);
-  }
+    console.log(options)
+     
+    // this.handleAdd();
+    // this.handleProfileUpdate(e, actual_tag);
+  };
 
-  handleProfileUpdate = (e) => {
+  handleProfileUpdate = (e, tag=this.state.profile.tag) => {
     e.preventDefault();
+    console.log(tag);
     let form_data = new FormData();
     if (this.state.image)
       form_data.append("profile_pic", this.state.image, this.state.image.name);
     form_data.append("user", this.props.user.pk);
-    form_data.append("tag", this.state.profile.tag);
+    form_data.append("tag", tag);
     if (this.props.token) {
       const username = this.state.user.username;
       this.props.updateProfile(username, this.props.token, form_data);
@@ -208,7 +225,7 @@ class Profile extends Component {
 
   render() {
     const { user } = this.props;
-    const { responce, profile } = this.state;
+    const { responce, profile, user_tags } = this.state;
 
     return (
       <MDBContainer className="container-md">
@@ -335,17 +352,11 @@ class Profile extends Component {
                 <strong className="grey-text">Your Tags</strong>
                 <div className="row">
                   <div className="col-8">
-                    {profile.tag
-                      ? profile.tag.map((tag, index) => (
-                          <MDBBadge
-                            pill
-                            key={index}
-                            className="aqua-gradient p-2 m-1"
-                          >
-                            {tag.name}
-                          </MDBBadge>
-                        ))
-                      : ""}
+                    {user_tags ? (
+                      user_tags.map((tag, index) =>
+                        <MDBBadge pill className="m-1" key={index}> {tag.name} </MDBBadge>
+                      )
+                    ) : ""}
                   </div>
                   <div className="col-2">
                     {this.state.adding_tag ? (

@@ -1,8 +1,10 @@
 from django.contrib.auth.models import User, Group
-from rest_framework import serializers
+from rest_framework import serializers, fields
 
 from .models import Profile
 from tags.models import Tag
+
+from .tag_choices import TAGS
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -28,15 +30,9 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
         model = Group
         fields = ['url', 'name']
 
-class TagSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Tag
-        fields = ['name']
-
-class ProfileSerializer(serializers.ModelSerializer):
-    tag = TagSerializer(many=True, read_only=True)
+class ProfileSerializer(serializers.HyperlinkedModelSerializer):
+    tag = fields.MultipleChoiceField(choices=TAGS)
     class Meta:
         model = Profile
-        fields = ['id', 'user', 'profile_pic', 'slug', 'tag']
-        lookup_field = 'slug'
+        fields = ['id', 'profile_pic', 'slug', 'tag']
         

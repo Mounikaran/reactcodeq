@@ -4,7 +4,7 @@ from django.db import models
 
 class Tag(models.Model):
     name = models.CharField(max_length=40)
-    version = models.CharField(max_length=20)
+    version = models.CharField(max_length=20, null=True, default="")
     detail = models.TextField(max_length=500, null=True)
     site = models.URLField(null=True)
     
