@@ -30,7 +30,7 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
         model = Group
         fields = ['url', 'name']
 
-class ProfileSerializer(serializers.HyperlinkedModelSerializer):
+class ProfileSerializer(serializers.ModelSerializer):
     tag = fields.MultipleChoiceField(choices=TAGS)
     class Meta:
         model = Profile

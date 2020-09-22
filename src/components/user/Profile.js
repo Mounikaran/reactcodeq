@@ -203,20 +203,24 @@ class Profile extends Component {
     this.state.tags.forEach((t) => {
       options.push(t.value);
     });
-    console.log(options)
+    options.push(...this.state.profile.tag);
+   
+    const tags = [...new Set(options)]
      
-    // this.handleAdd();
-    // this.handleProfileUpdate(e, actual_tag);
+    this.handleAdd();
+    this.handleProfileUpdate(e, tags);
   };
 
-  handleProfileUpdate = (e, tag=this.state.profile.tag) => {
+  handleProfileUpdate = (e, tags=this.state.profile.tag) => {
     e.preventDefault();
-    console.log(tag);
+
     let form_data = new FormData();
     if (this.state.image)
       form_data.append("profile_pic", this.state.image, this.state.image.name);
-    form_data.append("user", this.props.user.pk);
-    form_data.append("tag", tag);
+    // form_data.append("user", this.props.user.pk);
+    tags.forEach(tag => {
+      form_data.append("tag", tag);
+    });
     if (this.props.token) {
       const username = this.state.user.username;
       this.props.updateProfile(username, this.props.token, form_data);
