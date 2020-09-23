@@ -1,4 +1,7 @@
 import React, { Component } from "react";
+import ReactQuill from "react-quill";
+import EditorToolbar, { modules, formats } from "./EditorToolbar";
+import "react-quill/dist/quill.snow.css";
 import Select from "react-select";
 import {
   MDBContainer,
@@ -14,6 +17,7 @@ class QuestionCreate extends Component {
     super(props);
     this.state = {
       options: null,
+      value : null,
     };
   }
 
@@ -27,6 +31,12 @@ class QuestionCreate extends Component {
         options: options,
       });
     }
+  }
+
+  handleChange = (value) => {
+    this.setState({
+      value : value,
+    })
   }
 
   render() {
@@ -46,15 +56,16 @@ class QuestionCreate extends Component {
             <MDBCardBody>
               <form>
                 <MDBInput type="text" name="title" label="Question Title" />
-                <MDBInput
-                  type="textarea"
-                  name="code"
-                  label="Paste your Code Here"
-                  rows="5"
-                />
+                <span>Content</span>
+                <EditorToolbar />
+                <ReactQuill theme="snow" placeholder="create Your content" value={this.state.value} onChange={this.handleChange} modules={modules} formats={formats} />
                 <div className="md-form">
-                <span>Select Tags</span>
-                <Select options={options} onChange={this.changeTags} isMulti />
+                  <span>Select Tags</span>
+                  <Select
+                    options={options}
+                    onChange={this.changeTags}
+                    isMulti
+                  />
                 </div>
                 <div className="md-form">
                   <MDBInput
