@@ -46,6 +46,9 @@ class NavBar extends Component {
             {isAuthenticated ? (
               <MDBNavbarNav right>
                 <MDBNavItem>
+                  <MDBNavLink to="/question/ask">Ask</MDBNavLink>
+                </MDBNavItem>
+                <MDBNavItem>
                   <MDBNavLink to="/">Dashboard</MDBNavLink>
                 </MDBNavItem>
                 <MDBNavItem>
