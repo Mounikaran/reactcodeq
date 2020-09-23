@@ -2,15 +2,19 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator
 
+from multiselectfield import MultiSelectField
+
+from tags.tag_choices import TAGS
+
 # Create your models here.
 
 
 class Question(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    title = models.CharField(max_length=150, unique=True)
+    title = models.CharField(max_length=150)
     code = models.TextField(max_length=5000, null=True)
     image = models.ImageField(upload_to='questions/', null=True)
-    tags = models.ManyToManyField('tags.Tag', related_name='tags', blank=True)
+    tag = MultiSelectField(choices=TAGS, null=True, default="")
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
 
 

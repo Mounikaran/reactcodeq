@@ -4,7 +4,7 @@ from rest_framework import serializers, fields
 from .models import Profile
 from tags.models import Tag
 
-from .tag_choices import TAGS
+from tags.tag_choices import TAGS
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:

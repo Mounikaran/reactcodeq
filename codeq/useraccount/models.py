@@ -7,7 +7,7 @@ import os
 from autoslug import AutoSlugField
 from multiselectfield import MultiSelectField
 
-from .tag_choices import TAGS
+from tags.tag_choices import TAGS
 
 # Create your models here.
 

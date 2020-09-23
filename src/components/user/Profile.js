@@ -43,6 +43,7 @@ class Profile extends Component {
       adding_tag: false,
       tags: [],
       options: [],
+      default_options : null,
     };
   }
 
@@ -61,14 +62,19 @@ class Profile extends Component {
     if (this.props.tags) {
       if (this.props.profile.tag){
         let temp = []
+        let temp_dv = []
         this.props.profile.tag.forEach(tag => {
            temp.push(this.props.tags.find(obj => {
             return obj.id === tag;
-          }));
-          this.setState({
-            user_tags : temp,
-          })
+          })); 
         });
+        this.setState({
+          user_tags : temp,
+        })
+        temp.map((t, index) => temp_dv.push({ label: t.name, value: t.id }));
+        this.setState({
+          default_options : temp_dv
+        })
       }
       const options = [];
       this.props.tags.forEach((tag) => {
@@ -203,7 +209,6 @@ class Profile extends Component {
     this.state.tags.forEach((t) => {
       options.push(t.value);
     });
-    options.push(...this.state.profile.tag);
    
     const tags = [...new Set(options)]
      
@@ -217,7 +222,7 @@ class Profile extends Component {
     let form_data = new FormData();
     if (this.state.image)
       form_data.append("profile_pic", this.state.image, this.state.image.name);
-    // form_data.append("user", this.props.user.pk);
+  
     tags.forEach(tag => {
       form_data.append("tag", tag);
     });
@@ -229,8 +234,8 @@ class Profile extends Component {
 
   render() {
     const { user } = this.props;
-    const { responce, profile, user_tags } = this.state;
-
+    const { responce, profile, user_tags, default_options, options } = this.state;
+    
     return (
       <MDBContainer className="container-md">
         <MDBRow className="pt-md-4 pt-2 px-0">
@@ -355,14 +360,21 @@ class Profile extends Component {
               <MDBCardBody>
                 <strong className="grey-text">Your Tags</strong>
                 <div className="row">
-                  <div className="col-8">
-                    {user_tags ? (
-                      user_tags.map((tag, index) =>
-                        <MDBBadge pill className="m-1" key={index}> {tag.name} </MDBBadge>
-                      )
-                    ) : ""}
+                  <div className="col-6 col-lg-8 col-md-8">
+                    {user_tags
+                      ? user_tags.map((tag, index) => (
+                          <MDBBadge
+                            pill
+                            className="m-1 p-2 tempting-azure-gradient"
+                            key={index}
+                          >
+                            {" "}
+                            {tag.name}{" "}
+                          </MDBBadge>
+                        ))
+                      : ""}
                   </div>
-                  <div className="col-2">
+                  <div className="col-6 col-lg-4 text-md-right col-md-4">
                     {this.state.adding_tag ? (
                       ""
                     ) : (
@@ -372,7 +384,7 @@ class Profile extends Component {
                         onClick={this.handleAdd}
                         color="blue-grey"
                       >
-                        Add
+                        Update
                       </MDBBtn>
                     )}
                   </div>
@@ -381,10 +393,20 @@ class Profile extends Component {
                   <div>
                     <form onSubmit={this.handleAddTag}>
                       <Select
-                        options={this.state.options}
+                        options={options}
+                        defaultValue={default_options ? default_options : ""}
                         onChange={this.changeTags}
                         isMulti
                       />
+                      <MDBBtn
+                        size="sm"
+                        className=""
+                        outline
+                        onClick={this.handleAdd}
+                        color="red"
+                      >
+                        Cancel
+                      </MDBBtn>
                       <MDBBtn
                         size="sm"
                         className="float-right"
