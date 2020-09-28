@@ -14,6 +14,13 @@ export const authSuccess = (token) => {
   };
 };
 
+export const authFail = (error) => {
+  return {
+    type: actionTypes.AUTH_FAIL,
+    error: error,
+  };
+};
+
 export const userLoading = () => {
   return {
     type: actionTypes.USER_LOADING,
@@ -46,6 +53,12 @@ export const userUpdated = (user, token) => {
     type: actionTypes.USER_UPDATED,
     user: user,
     token: token,
+  };
+};
+export const userUpdateFail = (error) => {
+  return {
+    type: actionTypes.USER_UPDATEFAIL,
+    error: error,
   };
 };
 
@@ -85,20 +98,6 @@ export const profileUpdated = (profile) => {
 export const profileUpdateFail = (error) => {
   return {
     type: actionTypes.PROFILE_UPDATE_FAIL,
-    error: error,
-  };
-};
-
-export const userUpdateFail = (error) => {
-  return {
-    type: actionTypes.USER_UPDATEFAIL,
-    error: error,
-  };
-};
-
-export const authFail = (error) => {
-  return {
-    type: actionTypes.AUTH_FAIL,
     error: error,
   };
 };
@@ -337,6 +336,44 @@ export const loadTags = () => {
       })
       .catch((error) => {
         dispatch(tagsLoadFail(error));
+      });
+  };
+};
+
+// Questions
+
+export const questionLoading = () => {
+  return {
+    type: actionTypes.QUESTIONS_LOADING,
+  };
+};
+export const questionLoaded = (questions) => {
+  return {
+    type: actionTypes.QUESTIONS_LOADED,
+    questions: questions,
+  };
+};
+export const questionLoadFail = (error) => {
+  return {
+    type: actionTypes.QUESTION_LOAD_FAIL,
+    question_error: error,
+  };
+};
+
+export const loadQuestions = () => {
+  return (dispatch) => {
+    dispatch(questionLoading());
+    axios
+      .get("http://127.0.0.1:8000/post/questions/")
+      .then((res) => {
+        const questions = res.data;
+        const expirationDate = new Date(new Date().getTime() + 3600 * 1000);
+        localStorage.setItem("questions", questions);
+        localStorage.setItem("expirationDate", expirationDate);
+        dispatch(questionLoaded(questions));
+      })
+      .catch((error) => {
+        dispatch(questionLoadFail(error));
       });
   };
 };

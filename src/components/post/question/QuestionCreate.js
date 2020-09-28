@@ -3,6 +3,7 @@ import ReactQuill from "react-quill";
 import EditorToolbar, { modules, formats } from "./EditorToolbar";
 import "react-quill/dist/quill.snow.css";
 import Select from "react-select";
+import axios from "axios";
 import {
   MDBContainer,
   MDBCard,
@@ -17,7 +18,10 @@ class QuestionCreate extends Component {
     super(props);
     this.state = {
       options: null,
-      value : null,
+      value: null,
+      title: null,
+      image: null,
+      tags: null,
     };
   }
 
@@ -35,9 +39,56 @@ class QuestionCreate extends Component {
 
   handleChange = (value) => {
     this.setState({
-      value : value,
-    })
-  }
+      value: value,
+    });
+  };
+
+  changeTitle = (e) => {
+    this.setState({
+      title: e.target.value,
+    });
+  };
+
+  changeTags = (value) => {
+    this.setState({
+      tags: value,
+    });
+  };
+
+  handleImageChange = (e) => {
+    this.setState({
+      preview: URL.createObjectURL(e.target.files[0]),
+      image: e.target.files[0],
+    });
+  };
+
+  handleSubmit = (event) => {
+    event.preventDefault();
+    const { title, image, value, tags } = this.state;
+    console.log(title, image, value, tags.value);
+
+    if (this.props.isAuthenticated) {
+      let form_data = new FormData();
+      form_data.append("user", this.props.user.pk);
+      form_data.append("title", title);
+      if (image)
+        form_data.append("image", this.state.image, this.state.image.name);
+      form_data.append("code", value);
+      tags.forEach((tag) => {
+        form_data.append("tag", tag.value);
+      });
+      if (this.props.token) {
+        axios.defaults.headers = {
+          "Content-Type": "application/json",
+          Authorization: `Token ${this.props.token}`,
+        };
+        axios
+          .post("post/questions/", form_data)
+          .then((res) => console.log(res.data))
+          .catch((err) => console.log(err));
+      }
+    }
+  };
 
   render() {
     const { options } = this.state;
@@ -54,17 +105,32 @@ class QuestionCreate extends Component {
               </h3>
             </MDBCardHeader>
             <MDBCardBody>
-              <form>
-                <MDBInput type="text" name="title" label="Question Title" />
+              <form onSubmit={this.handleSubmit}>
+                <MDBInput
+                  type="text"
+                  name="title"
+                  label="Question Title"
+                  value={this.state.title}
+                  onChange={this.changeTitle}
+                  required
+                />
                 <span>Content</span>
                 <EditorToolbar />
-                <ReactQuill theme="snow" placeholder="create Your content" value={this.state.value} onChange={this.handleChange} modules={modules} formats={formats} />
+                <ReactQuill
+                  theme="snow"
+                  placeholder="create Your content"
+                  value={this.state.value}
+                  onChange={this.handleChange}
+                  modules={modules}
+                  formats={formats}
+                />
                 <div className="md-form">
                   <span>Select Tags</span>
                   <Select
                     options={options}
                     onChange={this.changeTags}
                     isMulti
+                    required
                   />
                 </div>
                 <div className="md-form">
@@ -72,6 +138,7 @@ class QuestionCreate extends Component {
                     type="file"
                     className="mb-0"
                     containerClass="mb-0"
+                    onChange={this.handleImageChange}
                   />
                   <span className="form-text text-muted">
                     You can share screenshot or code page

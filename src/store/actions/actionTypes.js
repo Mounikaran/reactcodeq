@@ -24,3 +24,8 @@ export const TAGS_LOADING = 'TAGS_LOADING'
 export const TAGS_LOADED = 'TAGS_LOADED'
 export const TAGS_LOAD_FAIL = 'TAGS_LOAD_FAIL'
 
+// Questions
+
+export const QUESTIONS_LOADING = "QUESTIONS_LOADING";
+export const QUESTIONS_LOADED = "QUESTIONS_LOADED";
+export const QUESTION_LOAD_FAIL = "QUESTION_LOAD_FAIL";

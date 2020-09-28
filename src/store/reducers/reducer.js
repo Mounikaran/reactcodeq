@@ -7,6 +7,8 @@ const initialState = {
   error: null,
   loading: false,
   user: null,
+  questions : null,
+  question_error : null,
 };
 
 const authStart = (state, action) => {
@@ -150,6 +152,30 @@ const tagsLoadFail = (state, action) => {
   });
 };
 
+//  Questions
+
+const questionLoading = (state, action) => {
+  return updateObject(state, {
+    loading : true,
+    question_error : null,
+  })
+}
+
+const questionLoaded = (state, action) => {
+  return updateObject(state, {
+    loading: false,
+    questions: action.questions,
+    question_error: null, 
+  })
+}
+
+const questionLoadFail = (state, action) => {
+  return updateObject(state, {
+    loading : false,
+    question_error: action.question_error,
+  })
+}
+
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.AUTH_START:
@@ -195,6 +221,13 @@ const reducer = (state = initialState, action) => {
       return tagsLoaded(state, action);
     case actionTypes.TAGS_LOAD_FAIL:
       return tagsLoadFail(state, action);
+
+    case actionTypes.QUESTIONS_LOADING:
+      return questionLoading(state, action);
+    case actionTypes.QUESTIONS_LOADED:
+      return questionLoaded(state, action);
+    case actionTypes.QUESTION_LOAD_FAIL:
+      return questionLoadFail(state, action);
 
     default:
       return state;

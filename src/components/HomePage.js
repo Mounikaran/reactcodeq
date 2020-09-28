@@ -10,6 +10,7 @@ import {
   MDBCardBody,
   MDBBadge,
 } from "mdbreact";
+import QuestionList from "./post/question/QuestionList";
 // import * as actions from "../store/actions/actions";
 
 class HomePage extends Component {
@@ -31,23 +32,24 @@ class HomePage extends Component {
               <h4>Hey, Try to Login * </h4>
             )}
             <p>This is the HomePage of CodeQ</p>
-            
-              {this.props.tags
-                ? this.props.tags.map((tag, index) => (
-                    <MDBBadge pill key={index} className="hoverable aqua-gradient p-2 m-1">
-                      {tag.name}
-                    </MDBBadge>
-                  ))
-                : ""}
-            
+
+            {this.props.tags
+              ? this.props.tags.map((tag, index) => (
+                  <MDBBadge
+                    pill
+                    key={index}
+                    className="hoverable aqua-gradient p-2 m-1"
+                  >
+                    {tag.name}
+                  </MDBBadge>
+                ))
+              : ""}
           </MDBContainer>
         </MDBJumbotron>
         <MDBContainer className="py-md-4 container-md">
           <MDBRow className="px-0">
             <MDBCol md="8" sm="12" className="p-1">
-              <MDBCard>
-                <MDBCardBody>Latest Questions</MDBCardBody>
-              </MDBCard>
+              <QuestionList {...this.props} />
             </MDBCol>
             <MDBCol md="4" sm="12" className="p-1">
               <MDBCard>

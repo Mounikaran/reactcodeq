@@ -4,7 +4,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 import os
 
-from autoslug import AutoSlugField
+from django_extensions.db.fields import AutoSlugField
 from multiselectfield import MultiSelectField
 
 from tags.tag_choices import TAGS
@@ -16,6 +16,9 @@ def create_favorites(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
 
+
+def my_slugify_function(content):
+    return content.replace('_', '-').lower()
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)

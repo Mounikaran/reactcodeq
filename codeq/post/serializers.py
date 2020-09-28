@@ -9,15 +9,18 @@ class QuestionSeriaizer(serializers.ModelSerializer):
     class Meta:
         model = Question
         fields = "__all__"
+        lookup_field = 'slug'
 
 
 class AnswerSeriaizer(serializers.ModelSerializer):
     class Meta:
         model = Answer
         fields = "__all__"
+        lookup_field = 'slug'
 
 
 class CommentSeriaizer(serializers.ModelSerializer):
     class Meta:
         model = Comment
         fields = "__all__"
+        lookup_field = 'slug'
