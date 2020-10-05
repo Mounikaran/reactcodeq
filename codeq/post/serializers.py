@@ -8,8 +8,9 @@ class QuestionSeriaizer(serializers.ModelSerializer):
     tag = fields.MultipleChoiceField(choices=TAGS)
     class Meta:
         model = Question
-        fields = "__all__"
+        fields = '__all__'
         lookup_field = 'slug'
+        depth = 1
 
 
 class AnswerSeriaizer(serializers.ModelSerializer):
@@ -17,6 +18,7 @@ class AnswerSeriaizer(serializers.ModelSerializer):
         model = Answer
         fields = "__all__"
         lookup_field = 'slug'
+        depth = 1
 
 
 class CommentSeriaizer(serializers.ModelSerializer):
@@ -24,3 +26,4 @@ class CommentSeriaizer(serializers.ModelSerializer):
         model = Comment
         fields = "__all__"
         lookup_field = 'slug'
+        depth = 1

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, Redirect } from "react-router-dom";
 
 import HomePage from "./components/HomePage";
 
@@ -15,7 +15,8 @@ import Profile from "./components/user/Profile";
 
 // Questions
 import QuestionCreate from "./components/post/question/QuestionCreate";
-
+import QuestionView from './components/post/question/QuestionView';
+import Page404 from "./components/404/Page404";
 
 class Routes extends Component {
   constructor(props) {
@@ -55,10 +56,24 @@ class Routes extends Component {
         />
 
         {/* Question routes */}
-      <Route exact path="/question/ask" component={ ()=> <QuestionCreate {...this.props} /> }/>
+        <Route
+          exact
+          path="/question/ask"
+          component={() => <QuestionCreate {...this.props} />}
+        />
+        <Route
+          exact
+          path="/question/:slug"
+          component={() => <QuestionView {...this.props} />}
+        />
 
         {/* HomePage  */}
         <Route exact path="/" component={() => <HomePage {...this.props} />} />
+        
+        {/* 404 page */}
+        <Route exact path="/404" component={Page404} />
+        <Redirect from="*" to="/404" />
+      
       </Switch>
     );
   }
