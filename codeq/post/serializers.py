@@ -3,9 +3,13 @@ from django.contrib.auth.models import User
 
 from .models import Question, Comment, Answer
 from tags.tag_choices import TAGS
+from useraccount.serializers import UserSerializer
 
 class QuestionSeriaizer(serializers.ModelSerializer):
     tag = fields.MultipleChoiceField(choices=TAGS)
+    user = UserSerializer(many=False, read_only=True)
+    user_id = serializers.IntegerField(write_only=True)
+    created_at = serializers.DateTimeField(format='%d-%h-%Y,%H%M', read_only=True)
     class Meta:
         model = Question
         fields = '__all__'

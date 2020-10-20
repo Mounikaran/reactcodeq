@@ -67,7 +67,8 @@ const mapDispatchToProps = (dispatch) => {
   return {
     onTryAutoSignup: () => dispatch(actions.authCheckState()),
     onLoadTags: () => dispatch(actions.loadTags()),
-    onLoadQuestions: () => dispatch(actions.loadQuestions()),    
+    onLoadQuestions: () => dispatch(actions.loadQuestions()),
+   
   };
 };
 

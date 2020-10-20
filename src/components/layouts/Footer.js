@@ -6,7 +6,11 @@ class Footer extends Component {
     return (
       
       <MDBFooter className="blue-gradient">
-        <MDBContainer>This will be a footer</MDBContainer>
+        <MDBContainer>
+          <div className="text-center py-3 font-weight-bolder">
+            Copyrights &copy; CodeQ 2020
+          </div>
+        </MDBContainer>
       </MDBFooter>
       
     );

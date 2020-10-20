@@ -13,7 +13,7 @@ from tags.tag_choices import TAGS
 
 
 def my_slugify_function(content):
-    return content.replace('_', '-').lower()
+    return content.replace(' ', '-').lower()
 
 def generate_slug():
     n = 50
@@ -29,11 +29,13 @@ class Question(models.Model):
     code = models.TextField(max_length=5000, null=True)
     image = models.ImageField(upload_to='questions/', null=True)
     tag = MultiSelectField(choices=TAGS, null=True, default="")
-    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
 
+    class Meta:
+        ordering = ['-created_at']
 
     def __str__(self):
-        return self.title
+        return self.slug
 
 
 class Answer(models.Model):

@@ -11,7 +11,8 @@ import PasswordResetChange from './components/account/PasswordResetChange'
 import EmailSent from "./components/account/EmailSent";
 
 // Users
-import Profile from "./components/user/Profile";
+// import Profile from "./components/user/Profile";
+import DashBoard from "./components/user/DashBoard";
 
 // Questions
 import QuestionCreate from "./components/post/question/QuestionCreate";
@@ -49,11 +50,12 @@ class Routes extends Component {
 
         {/* User profile and dashboard */}
 
-        <Route
+        {/* <Route
           exact
           path="/profile"
           component={() => <Profile {...this.props} />}
-        />
+        /> */}
+        <Route exact path="/dashboard" component={() => <DashBoard {...this.props} />} />
 
         {/* Question routes */}
         <Route

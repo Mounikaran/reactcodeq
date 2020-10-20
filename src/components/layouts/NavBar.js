@@ -49,11 +49,11 @@ class NavBar extends Component {
                   <MDBNavLink to="/question/ask">Ask</MDBNavLink>
                 </MDBNavItem>
                 <MDBNavItem>
-                  <MDBNavLink to="/">Dashboard</MDBNavLink>
+                  <MDBNavLink to="/dashboard">Dashboard</MDBNavLink>
                 </MDBNavItem>
-                <MDBNavItem>
+                {/* <MDBNavItem>
                   <MDBNavLink to="/profile">Profile</MDBNavLink>
-                </MDBNavItem>
+                </MDBNavItem> */}
                 <MDBNavItem>
                   <MDBNavLink to="#" onClick={this.logout}>Logout</MDBNavLink>
                 </MDBNavItem>

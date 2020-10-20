@@ -5,6 +5,15 @@
 .text-20 {
     font-size: 20px;
 }
+.text-12 {
+    font-size: 12px;
+}
 p{
     margin-bottom: 0;
+}
+
+pre{
+    background-color: silver;
+    padding: 0.5rem;
+    border-radius: 5px;
 }

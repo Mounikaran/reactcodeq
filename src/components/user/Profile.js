@@ -1,10 +1,9 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import Select from "react-select";
 import axios from "axios";
 import { connect } from "react-redux";
 import * as actions from "../../store/actions/actions";
 import {
-  MDBContainer,
   MDBRow,
   MDBCol,
   MDBCard,
@@ -30,12 +29,11 @@ class Profile extends Component {
       },
       user: {},
       profile: {},
-      user_tags : [],
+      user_tags: [],
       preview: null,
       image: null,
       modal: false,
       uploadmodal: false,
-      deletemodal: false,
       match: false,
       matchmsg: "",
       responce: null,
@@ -43,7 +41,7 @@ class Profile extends Component {
       adding_tag: false,
       tags: [],
       options: [],
-      default_options : null,
+      default_options: null,
     };
   }
 
@@ -60,21 +58,23 @@ class Profile extends Component {
       });
     }
     if (this.props.tags) {
-      if (this.props.profile.tag){
-        let temp = []
-        let temp_dv = []
-        this.props.profile.tag.forEach(tag => {
-           temp.push(this.props.tags.find(obj => {
-            return obj.id === tag;
-          })); 
+      if (this.props.profile) {
+        let temp = [];
+        let temp_dv = [];
+        this.props.profile.tag.forEach((tag) => {
+          temp.push(
+            this.props.tags.find((obj) => {
+              return obj.id === tag;
+            })
+          );
         });
         this.setState({
-          user_tags : temp,
-        })
+          user_tags: temp,
+        });
         temp.map((t, index) => temp_dv.push({ label: t.name, value: t.id }));
         this.setState({
-          default_options : temp_dv
-        })
+          default_options: temp_dv,
+        });
       }
       const options = [];
       this.props.tags.forEach((tag) => {
@@ -151,11 +151,6 @@ class Profile extends Component {
       modal: !this.state.modal,
     });
   };
-  deleteModalToggle = () => {
-    this.setState({
-      deletemodal: !this.state.deletemodal,
-    });
-  };
 
   handleUpdate = (e) => {
     e.preventDefault();
@@ -166,20 +161,6 @@ class Profile extends Component {
     this.setState({
       tags: value,
     });
-  };
-
-  handleDelete = (e) => {
-    e.preventDefault();
-    if (this.props.token) {
-      axios.defaults.headers = {
-        "Content-Type": "application/json",
-        Authorization: `Token ${this.props.token}`,
-      };
-      axios
-        .delete(`account/users/${this.props.user.username}`)
-        .then((res) => this.props.logout())
-        .catch((err) => console.log(err));
-    }
   };
 
   handleChangePassword = (e) => {
@@ -205,25 +186,34 @@ class Profile extends Component {
   handleAddTag = (e) => {
     e.preventDefault();
     const options = [];
-    // const { tag } = this.state.profile;
-    this.state.tags.forEach((t) => {
-      options.push(t.value);
-    });
-   
-    const tags = [...new Set(options)]
-     
+    const { tags, default_options } = this.state;
+    if (tags) {
+      tags.forEach((t) => {
+        options.push(t.value);
+      });
+      if (!tags.length) {
+        default_options.forEach((t) => {
+          options.push(t.value);
+        });
+      }
+    }
+
+    // console.log(this.state.default_options);
+
+    const final_tags = [...new Set(options)];
+    // console.log(final_tags);
     this.handleAdd();
-    this.handleProfileUpdate(e, tags);
+    this.handleProfileUpdate(e, final_tags);
   };
 
-  handleProfileUpdate = (e, tags=this.state.profile.tag) => {
+  handleProfileUpdate = (e, tags = this.state.profile.tag) => {
     e.preventDefault();
 
     let form_data = new FormData();
     if (this.state.image)
       form_data.append("profile_pic", this.state.image, this.state.image.name);
-  
-    tags.forEach(tag => {
+
+    tags.forEach((tag) => {
       form_data.append("tag", tag);
     });
     if (this.props.token) {
@@ -234,10 +224,16 @@ class Profile extends Component {
 
   render() {
     const { user } = this.props;
-    const { responce, profile, user_tags, default_options, options } = this.state;
-    
+    const {
+      responce,
+      profile,
+      user_tags,
+      default_options,
+      options,
+    } = this.state;
+
     return (
-      <MDBContainer className="container-md">
+      <Fragment>
         <MDBRow className="pt-md-4 pt-2 px-0">
           <MDBCol md="4" sm="12" lg="4" className="px-0">
             <MDBRow className="w-100 mx-0 px-0">
@@ -248,21 +244,21 @@ class Profile extends Component {
                       <MDBCardImage
                         className="img-fluid"
                         src={`${profile.profile_pic}`}
+                        // src="photo-1503023345310-bd7c1de61c7d.jpeg"
                         waves
                       />
                     </MDBView>
                     <MDBCardBody>
-                      <MDBBtn onClick={this.uploadModal}>
+                      <MDBBtn
+                        size="sm"
+                        gradient="aqua"
+                        onClick={this.uploadModal}
+                      >
                         Change Profile Picture
                       </MDBBtn>
                     </MDBCardBody>
                   </MDBCard>
                 </div>
-              </MDBCol>
-              <MDBCol className="py-2">
-                <MDBCard>
-                  <MDBCardBody></MDBCardBody>
-                </MDBCard>
               </MDBCol>
             </MDBRow>
           </MDBCol>
@@ -365,11 +361,11 @@ class Profile extends Component {
                       ? user_tags.map((tag, index) => (
                           <MDBBadge
                             pill
-                            className="m-1 p-2 tempting-azure-gradient"
+                            color="elegant-color"
+                            className="m-1 p-2"
                             key={index}
                           >
-                            {" "}
-                            {tag.name}{" "}
+                            {tag.name}
                           </MDBBadge>
                         ))
                       : ""}
@@ -423,31 +419,6 @@ class Profile extends Component {
                 )}
               </MDBCardBody>
             </MDBCard>
-            <MDBRow className="mb-2">
-              <MDBCol size="12">
-                <MDBCard>
-                  <MDBCardBody>
-                    <div className="d-flex justify-content-between">
-                      <div>
-                        {" "}
-                        <p className="text-muted">Delete Account</p>{" "}
-                      </div>
-                      <div>
-                        {" "}
-                        <MDBBtn
-                          size="sm"
-                          onClick={this.deleteModalToggle}
-                          color="red lighten-2"
-                        >
-                          {" "}
-                          Delete{" "}
-                        </MDBBtn>{" "}
-                      </div>
-                    </div>
-                  </MDBCardBody>
-                </MDBCard>
-              </MDBCol>
-            </MDBRow>
           </MDBCol>
         </MDBRow>
 
@@ -491,32 +462,6 @@ class Profile extends Component {
                   size="sm"
                 >
                   Cancel
-                </MDBBtn>
-              </div>
-            </form>
-          </MDBModalBody>
-        </MDBModal>
-
-        {/* delete account modal */}
-        <MDBModal
-          isOpen={this.state.deletemodal}
-          toggle={this.deleteModalToggle}
-          centered
-        >
-          <MDBModalBody>
-            <form onSubmit={this.handleDelete}>
-              Are You Sure About <strong>Delete</strong> your Account ?
-              <div className="py-2 text-center">
-                <MDBBtn size="sm" type="submit" color="red" outline>
-                  Delete
-                </MDBBtn>
-                <MDBBtn
-                  size="sm"
-                  type="button"
-                  onClick={this.deleteModalToggle}
-                  color="green"
-                >
-                  No
                 </MDBBtn>
               </div>
             </form>
@@ -567,7 +512,7 @@ class Profile extends Component {
             </form>
           </MDBModalBody>
         </MDBModal>
-      </MDBContainer>
+      </Fragment>
     );
   }
 }

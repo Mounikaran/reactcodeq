@@ -27,6 +27,34 @@ class QuestionList extends Component {
         slug : slug,
       })
     }
+
+    printName = (obj) => {
+      return <span key={obj.id} className="mr-1">{obj.name}</span>
+    }
+
+    time24to12 = (time) => {
+      var date = time.split(',')[0];
+      time = time.split(',')[1];
+      var hours = time[0] + time[1];
+      var min = time[2] + time[3];
+      hours = parseInt(hours);
+      min = parseInt(min);
+      var actual_time = null;
+      if (hours < 12) {
+        actual_time =
+          (hours < 10 ? "0" + hours : hours) +
+          ":" +
+          (min < 10 ? "0" + min : min) +
+          " AM";
+      } else {
+        if (hours !== 12) {
+          hours = hours - 12; 
+        } 
+
+        actual_time = (hours < 10 ? "0" + hours : hours ) + ":" + (min < 10 ? "0"+min : min) + " PM";
+      }
+    return <span>{date} {actual_time}</span>;
+    }
     
     render() {
         const {questions, slug, redirect} = this.state;
@@ -37,22 +65,40 @@ class QuestionList extends Component {
         } 
 
         return (
-          <MDBContainer fluid className="container-md px-0" >
+          <MDBContainer fluid className="container-md px-0">
             {questions ? (
               questions.map((question, index) => (
                 <MDBCard
-                  className="my-1 hoverable pointer"
+                  className="mb-2 hoverable pointer"
                   key={index}
                   onClick={() => {
-                    this.handleClick(question.slug)
+                    this.handleClick(question.slug);
                   }}
                 >
                   <MDBCardBody>
-                    <p className="text-20">{question.title}</p>
+                    <div className="d-flex justify-content-between">
+                      <div className="text-20">{question.title}</div>
+                      <div> Answers <span className="badge badge-success"> 1 </span></div>
+                    </div>
                   </MDBCardBody>
-                  <MDBCardFooter className="text-muted font-small d-flex justify-content-between">
-                    <p> Posted on : {question.created_at}</p>
-                    <p> By : {question.user.username}</p>
+                  <MDBCardFooter className="text-muted font-small bg-white d-flex justify-content-between">
+                    <p className="text-12">By : {question.user.username}</p>
+
+                    <p className="text-12">
+                      {" "}
+                      Tags :{" "}
+                      {question.tag.map((tag, index) =>
+                        this.printName(
+                          this.props.tags.find((obj) => {
+                            return obj.id === tag;
+                          })
+                        )
+                      )}
+                    </p>
+                    <p className="text-12">
+                      {" "}
+                      Posted on : {this.time24to12(question.created_at)}
+                    </p>
                   </MDBCardFooter>
                 </MDBCard>
               ))

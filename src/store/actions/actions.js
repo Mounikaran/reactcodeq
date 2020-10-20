@@ -134,6 +134,7 @@ export const authLogin = (username, password) => {
         localStorage.setItem("token", token);
         localStorage.setItem("expirationDate", expirationDate);
         dispatch(authSuccess(token));
+        dispatch(loadProfile(username, token));
         dispatch(checkAuthTimeout(3600));
       })
       .catch((err) => {
@@ -161,6 +162,7 @@ export const authSignup = (username, email, password1, password2) => {
         localStorage.setItem("token", token);
         localStorage.setItem("expirationDate", expirationDate);
         dispatch(authSuccess(token));
+        dispatch(loadProfile(username, token));
         dispatch(checkAuthTimeout(3600));
       })
       .catch((err) => {
@@ -186,8 +188,8 @@ export const loadUser = () => {
           const expirationDate = new Date(new Date().getTime() + 3600 * 1000);
           localStorage.setItem("user", user);
           localStorage.setItem("expirationDate", expirationDate);
-          dispatch(loadProfile(username, token));
           dispatch(userLoaded(user, token));
+          dispatch(loadProfile(username, token));
           dispatch(checkAuthTimeout(3600));
         })
         .catch((error) => {

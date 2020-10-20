@@ -65,11 +65,12 @@ class QuestionCreate extends Component {
   handleSubmit = (event) => {
     event.preventDefault();
     const { title, image, value, tags } = this.state;
-    console.log(title, image, value, tags.value);
+    // console.log(title, image, value, tags.value);
 
     if (this.props.isAuthenticated) {
       let form_data = new FormData();
-      form_data.append("user", this.props.user.pk);
+      if (this.props.user)
+        form_data.append("user_id", this.props.user.pk);
       form_data.append("title", title);
       if (image)
         form_data.append("image", this.state.image, this.state.image.name);
@@ -96,10 +97,10 @@ class QuestionCreate extends Component {
       <MDBContainer fluid className="container-md py-md-4 px-0">
         <div className="d-flex justify-content-center ">
           <MDBCard className="w-responsive">
-            <MDBCardHeader className="winter-neva-gradient">
+            <MDBCardHeader className="light-blue lighten-5">
               <h3 className="text-center">
                 <span className="px-4">
-                  Hi, {this.props.user ? this.props.user.username : ""}.
+                  Hi, {this.props.user ? this.props.user.username : ""}
                 </span>
                 Ask Your Question
               </h3>
@@ -114,6 +115,18 @@ class QuestionCreate extends Component {
                   onChange={this.changeTitle}
                   required
                 />
+                <div className="md-form">
+                  <span className="mb-0"> Image to Text </span>
+                  <MDBInput
+                    type="file"
+                    className="mb-0 mt-0"
+                    containerClass="mb-0 mt-0"
+                    onChange={this.handleImageChange}
+                  />
+                  <span className="form-text text-muted">
+                    You can share screenshot or code page
+                  </span>
+                </div>
                 <span>Content</span>
                 <EditorToolbar />
                 <ReactQuill
@@ -133,21 +146,10 @@ class QuestionCreate extends Component {
                     required
                   />
                 </div>
-                <div className="md-form">
-                  <MDBInput
-                    type="file"
-                    className="mb-0"
-                    containerClass="mb-0"
-                    onChange={this.handleImageChange}
-                  />
-                  <span className="form-text text-muted">
-                    You can share screenshot or code page
-                  </span>
-                </div>
+
                 <div className="text-center">
-                  <MDBBtn type="submit" size="sm" className="purple darken-2">
-                    {" "}
-                    Post{" "}
+                  <MDBBtn type="submit" gradient="blue">
+                    Post
                   </MDBBtn>
                 </div>
               </form>
