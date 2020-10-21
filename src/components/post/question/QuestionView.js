@@ -37,7 +37,7 @@ class QuestionView extends Component {
   };
   time24to12 = (time) => {
     var date = time.split(",")[0];
-    time = time.split(",")[1];
+    time = time.split(",")[1];  
     var hours = time[0] + time[1];
     var min = time[2] + time[3];
     hours = parseInt(hours);
