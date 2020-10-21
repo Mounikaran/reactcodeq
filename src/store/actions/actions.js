@@ -357,7 +357,7 @@ export const questionLoaded = (questions) => {
 };
 export const questionLoadFail = (error) => {
   return {
-    type: actionTypes.QUESTION_LOAD_FAIL,
+    type: actionTypes.QUESTIONS_LOAD_FAIL,
     question_error: error,
   };
 };
@@ -376,6 +376,86 @@ export const loadQuestions = () => {
       })
       .catch((error) => {
         dispatch(questionLoadFail(error));
+      });
+  };
+};
+
+
+// get Question
+
+export const getQuestionLoading = () => {
+  return {
+    type: actionTypes.QUESTION_LOADING,
+  };
+};
+export const getQuestionLoaded = (question) => {
+  return {
+    type: actionTypes.QUESTION_LOADED,
+    question: question,
+  };
+};
+export const getQuestionLoadFail = (error) => {
+  return {
+    type: actionTypes.QUESTION_LOAD_FAIL,
+    question_error: error,
+  };
+};
+
+//  Answers
+export const answersLoading = () => {
+  return {
+    type: actionTypes.ANSWERS_LOADING,
+  };
+};
+export const answersLoaded = (answers) => {
+  return {
+    type: actionTypes.ANSWERS_LOADED,
+    answers: answers,
+  };
+};
+export const answersLoadFail = (error) => {
+  return {
+    type: actionTypes.ANSWERS_LOAD_FAIL,
+    answers_error: error,
+  };
+};
+
+// get comments
+
+export const commentsLoading = () => {
+  return {
+    type: actionTypes.COMMENTS_LOADING,
+  };
+};
+export const commentsLoaded = (comments) => {
+  return {
+    type: actionTypes.COMMENTS_LOADED,
+    comments: comments,
+  };
+};
+export const commentsLoadFail = (error) => {
+  return {
+    type: actionTypes.COMMENTS_LOAD_FAIL,
+    comments_error: error,
+  };
+};
+
+export const getQuestion = (slug) => {
+  return (dispatch) => {
+    dispatch(getQuestionLoading());
+    axios
+      .get(
+        `http://127.0.0.1:8000/post/questions/${slug}/`
+      )
+      .then((res) => {
+        const question = res.data;
+        const expirationDate = new Date(new Date().getTime() + 3600 * 1000);
+        localStorage.setItem("question", question);
+        localStorage.setItem("expirationDate", expirationDate);
+        dispatch(getQuestionLoaded(question));
+      })
+      .catch((error) => {
+        dispatch(getQuestionLoadFail(error));
       });
   };
 };

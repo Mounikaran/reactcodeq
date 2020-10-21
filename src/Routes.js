@@ -66,10 +66,10 @@ class Routes extends Component {
         <Route
           exact
           path="/question/:slug"
-          component={() => <QuestionView {...this.props} />}
+          component={QuestionView}
         />
 
-        {/* HomePage  */}
+        {/* HomePage  */}w
         <Route exact path="/" component={() => <HomePage {...this.props} />} />
         
         {/* 404 page */}

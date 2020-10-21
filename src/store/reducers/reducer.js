@@ -1,3 +1,4 @@
+import { act } from "react-dom/test-utils";
 import * as actionTypes from "../actions/actionTypes";
 import { updateObject } from "../utility";
 
@@ -9,6 +10,12 @@ const initialState = {
   user: null,
   questions : null,
   question_error : null,
+  question : null,
+  answers : null,
+  answers_error : null,
+  comments : null,
+  comments_error : null,
+
 };
 
 const authStart = (state, action) => {
@@ -154,14 +161,14 @@ const tagsLoadFail = (state, action) => {
 
 //  Questions
 
-const questionLoading = (state, action) => {
+const questionsLoading = (state, action) => {
   return updateObject(state, {
     loading : true,
     question_error : null,
   })
 }
 
-const questionLoaded = (state, action) => {
+const questionsLoaded = (state, action) => {
   return updateObject(state, {
     loading: false,
     questions: action.questions,
@@ -169,12 +176,73 @@ const questionLoaded = (state, action) => {
   })
 }
 
-const questionLoadFail = (state, action) => {
+const questionsLoadFail = (state, action) => {
   return updateObject(state, {
     loading : false,
     question_error: action.question_error,
   })
 }
+// get  questions
+const getQuestionLoading = (state, action) => {
+  return updateObject(state, {
+    loading: true,
+    question_error: null,
+  });
+}
+const getQuestionLoaded = (state, action) => {
+  return updateObject(state, {
+    loading: false,
+    question : action.question,
+    question_error: null,
+  });
+}
+const getQuestionLoadFail = (state, action) => {
+  return updateObject(state, {
+    loading: true,
+    question_error: action.question_error,
+  });
+}
+// get  answers
+const answersLoading = (state, action) => {
+  return updateObject(state, {
+    loading: true,
+    answers_error: null,
+  });
+}
+const answersLoaded = (state, action) => {
+  return updateObject(state, {
+    loading: false,
+    answers : action.answers,
+    answers_error: null,
+  });
+}
+const answersLoadFail = (state, action) => {
+  return updateObject(state, {
+    loading: false,
+    answers_error: action.answers_error,
+  });
+}
+// get  comments
+const commentsLoading = (state, action) => {
+  return updateObject(state, {
+    loading: true,
+    comments_error: null,
+  });
+}
+const commentsLoaded = (state, action) => {
+  return updateObject(state, {
+    loading: false,
+    comments : action.comments,
+    comments_error: null,
+  });
+}
+const commentsLoadFail = (state, action) => {
+  return updateObject(state, {
+    loading: false,
+    comments_error: action.comments_error,
+  });
+}
+
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
@@ -223,11 +291,32 @@ const reducer = (state = initialState, action) => {
       return tagsLoadFail(state, action);
 
     case actionTypes.QUESTIONS_LOADING:
-      return questionLoading(state, action);
+      return questionsLoading(state, action);
     case actionTypes.QUESTIONS_LOADED:
-      return questionLoaded(state, action);
+      return questionsLoaded(state, action);
+    case actionTypes.QUESTIONS_LOAD_FAIL:
+      return questionsLoadFail(state, action);
+
+    case actionTypes.QUESTION_LOADING:
+      return getQuestionLoading(state, action);
+    case actionTypes.QUESTION_LOADED:
+      return getQuestionLoaded(state, action);
     case actionTypes.QUESTION_LOAD_FAIL:
-      return questionLoadFail(state, action);
+      return getQuestionLoadFail(state, action);
+
+    case actionTypes.ANSWERS_LOADING:
+      return answersLoading(state, action);
+    case actionTypes.ANSWERS_LOADED:
+      return answersLoaded(state, action);
+    case actionTypes.ANSWERS_LOAD_FAIL:
+      return answersLoadFail(state, action);
+
+    case actionTypes.COMMENTS_LOADING:
+      return commentsLoading(state, action);
+    case actionTypes.COMMENTS_LOADED:
+      return commentsLoaded(state, action);
+    case actionTypes.COMMENTS_LOAD_FAIL:
+      return commentsLoadFail(state, action);
 
     default:
       return state;
