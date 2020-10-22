@@ -18,6 +18,12 @@ class QuestionSeriaizer(serializers.ModelSerializer):
 
 
 class AnswerSeriaizer(serializers.ModelSerializer):
+    user = UserSerializer(many=False, read_only=True)
+    user_id = serializers.IntegerField(write_only=True)
+    question = QuestionSeriaizer(many=False, read_only=True)
+    question_id = serializers.IntegerField(write_only=True)
+    created_at = serializers.DateTimeField(
+        format='%d-%h-%Y,%H%M', read_only=True)
     class Meta:
         model = Answer
         fields = "__all__"
@@ -26,6 +32,12 @@ class AnswerSeriaizer(serializers.ModelSerializer):
 
 
 class CommentSeriaizer(serializers.ModelSerializer):
+    user = UserSerializer(many=False, read_only=True)
+    user_id = serializers.IntegerField(write_only=True)
+    answer = AnswerSeriaizer(many=False, read_only=True)
+    answer_id = serializers.IntegerField(write_only=True)
+    created_at = serializers.DateTimeField(
+        format='%d-%h-%Y,%H%M', read_only=True)
     class Meta:
         model = Comment
         fields = "__all__"

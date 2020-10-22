@@ -17,3 +17,8 @@ pre{
     padding: 0.5rem;
     border-radius: 5px;
 }
+.answer-tag{
+    position: absolute;
+    right: -5px;
+    top: 10px;
+}

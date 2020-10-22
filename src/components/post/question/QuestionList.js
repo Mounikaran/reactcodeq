@@ -76,24 +76,23 @@ class QuestionList extends Component {
                   }}
                 >
                   <MDBCardBody>
-                    <div className="d-flex justify-content-between">
-                      <div className="text-20">{question.title}</div>
-                      <div> Answers <span className="badge badge-success"> 1 </span></div>
+                    <div className="text-20">{question.title}</div>
+                    <div className="badge badge-info answer-tag z-depth-1-half">
+                      Answers <span className="">0</span>
                     </div>
                   </MDBCardBody>
                   <MDBCardFooter className="text-muted font-small bg-white d-flex justify-content-between">
                     <p className="text-12">By : {question.user.username}</p>
 
                     <p className="text-12">
-                      {" "}
-                      Tags :{" "}
-                      {question.tag.map((tag, index) =>
+                      Tags :{this.props.tags ?question.tag.map((tag, index) =>
                         this.printName(
                           this.props.tags.find((obj) => {
                             return obj.id === tag;
                           })
                         )
-                      )}
+                      ):"" }
+                      
                     </p>
                     <p className="text-12">
                       {" "}

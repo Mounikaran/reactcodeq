@@ -41,7 +41,7 @@ class Question(models.Model):
 class Answer(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     question = models.ForeignKey('post.Question', on_delete=models.CASCADE)
-    short_answer = models.CharField(max_length=150, null=True)
+    # short_answer = models.CharField(max_length=150, null=True)
     slug = models.SlugField(unique=True, max_length=50, default=generate_slug)
     code = models.TextField(max_length=5000, null=True)
     image = models.ImageField(upload_to='answers/', null=True)
