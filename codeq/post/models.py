@@ -46,7 +46,7 @@ class Answer(models.Model):
     code = models.TextField(max_length=5000, null=True)
     image = models.ImageField(upload_to='answers/', null=True)
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
-    votes = models.IntegerField(validators=[MinValueValidator(0)])
+    votes = models.IntegerField(validators=[MinValueValidator(0)], default=0)
 
     def __str__(self):
         return self.user.username + self.question.title + self.id

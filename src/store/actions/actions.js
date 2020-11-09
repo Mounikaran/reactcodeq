@@ -112,13 +112,13 @@ export const logout = () => {
   };
 };
 
-export const checkAuthTimeout = (expirationTime) => {
-  return (dispatch) => {
-    setTimeout(() => {
-      dispatch(logout());
-    }, expirationTime * 1000);
-  };
-};
+// export const checkAuthTimeout = (expirationTime) => {
+//   return (dispatch) => {
+//     setTimeout(() => {
+//       dispatch(logout());
+//     }, expirationTime * 1000);
+//   };
+// };
 
 export const authLogin = (username, password) => {
   return (dispatch) => {
@@ -130,12 +130,12 @@ export const authLogin = (username, password) => {
       })
       .then((res) => {
         const token = res.data.key;
-        const expirationDate = new Date(new Date().getTime() + 3600 * 1000);
+        // const expirationDate = new Date(new Date().getTime() + 3600 * 1000);
         localStorage.setItem("token", token);
-        localStorage.setItem("expirationDate", expirationDate);
+        // localStorage.setItem("expirationDate", expirationDate);
         dispatch(authSuccess(token));
         dispatch(loadProfile(username, token));
-        dispatch(checkAuthTimeout(3600));
+        // dispatch(checkAuthTimeout(3600));
       })
       .catch((err) => {
         if (err.message === "Request failed with status code 400")
@@ -158,12 +158,12 @@ export const authSignup = (username, email, password1, password2) => {
       })
       .then((res) => {
         const token = res.data.key;
-        const expirationDate = new Date(new Date().getTime() + 3600 * 1000);
+        // const expirationDate = new Date(new Date().getTime() + 3600 * 1000);
         localStorage.setItem("token", token);
-        localStorage.setItem("expirationDate", expirationDate);
+        // localStorage.setItem("expirationDate", expirationDate);
         dispatch(authSuccess(token));
         dispatch(loadProfile(username, token));
-        dispatch(checkAuthTimeout(3600));
+        // dispatch(checkAuthTimeout(3600));
       })
       .catch((err) => {
         dispatch(authFail(err));
@@ -185,12 +185,12 @@ export const loadUser = () => {
         .then((res) => {
           const username = res.data.username;
           const user = JSON.stringify(res.data);
-          const expirationDate = new Date(new Date().getTime() + 3600 * 1000);
+          // const expirationDate = new Date(new Date().getTime() + 3600 * 1000);
           localStorage.setItem("user", user);
-          localStorage.setItem("expirationDate", expirationDate);
+          // localStorage.setItem("expirationDate", expirationDate);
           dispatch(userLoaded(user, token));
           dispatch(loadProfile(username, token));
-          dispatch(checkAuthTimeout(3600));
+          // dispatch(checkAuthTimeout(3600));
         })
         .catch((error) => {
           dispatch(userLoadFail(error));
@@ -212,11 +212,11 @@ export const updateUser = (userData) => {
         .put(`http://127.0.0.1:8000/account/users/${user.username}/`, userData)
         .then((res) => {
           const userUpdate = JSON.stringify(userData);
-          const expirationDate = new Date(new Date().getTime() + 3600 * 1000);
+          // const expirationDate = new Date(new Date().getTime() + 3600 * 1000);
           localStorage.setItem("user", userUpdate);
-          localStorage.setItem("expirationDate", expirationDate);
+          // localStorage.setItem("expirationDate", expirationDate);
           dispatch(userUpdated(userUpdate, token));
-          dispatch(checkAuthTimeout(3600));
+          // dispatch(checkAuthTimeout(3600));
         })
         .catch((error) => {
           dispatch(userUpdateFail(error));
@@ -235,21 +235,21 @@ export const authCheckState = () => {
     } else {
       const user = localStorage.getItem("user");
       const profile = localStorage.getItem("profile");
-      const expirationDate = new Date(localStorage.getItem("expirationDate"));
-      if (expirationDate <= new Date()) {
-        dispatch(logout());
-        dispatch(userLoadFail());
-        dispatch(profileFail());
-      } else {
+      // const expirationDate = new Date(localStorage.getItem("expirationDate"));
+      // if (expirationDate <= new Date()) {
+      //   dispatch(logout());
+      //   dispatch(userLoadFail());
+      //   dispatch(profileFail());
+      // } else {
         dispatch(authSuccess(token));
         dispatch(userLoaded(user, token));
         dispatch(profileLoaded(profile));
-        dispatch(
-          checkAuthTimeout(
-            (expirationDate.getTime() - new Date().getTime()) / 1000
-          )
-        );
-      }
+        // dispatch(
+        //   checkAuthTimeout(
+        //     (expirationDate.getTime() - new Date().getTime()) / 1000
+        //   )
+        // );
+      // }
     }
   };
 };
@@ -266,9 +266,9 @@ export const loadProfile = (username, token) => {
         .get(`http://127.0.0.1:8000/account/profiles/${username}/`)
         .then((res) => {
           const profile = JSON.stringify(res.data);
-          const expirationDate = new Date(new Date().getTime() + 3600 * 1000);
+          // const expirationDate = new Date(new Date().getTime() + 3600 * 1000);
           localStorage.setItem("profile", profile);
-          localStorage.setItem("expirationDate", expirationDate);
+          // localStorage.setItem("expirationDate", expirationDate);
           dispatch(profileLoaded(profile));
         })
         .catch((error) => {
@@ -290,9 +290,9 @@ export const updateProfile = (username, token, data) => {
         .put(`http://127.0.0.1:8000/account/profiles/${username}/`, data)
         .then((res) => {
           const profile = JSON.stringify(res.data);
-          const expirationDate = new Date(new Date().getTime() + 3600 * 1000);
+          // const expirationDate = new Date(new Date().getTime() + 3600 * 1000);
           localStorage.setItem("profile", profile);
-          localStorage.setItem("expirationDate", expirationDate);
+          // localStorage.setItem("expirationDate", expirationDate);
           dispatch(profileUpdated(profile));
         })
         .catch((error) => {
@@ -331,9 +331,9 @@ export const loadTags = () => {
       .get("http://127.0.0.1:8000/tags/")
       .then((res) => {
         const tags = res.data;
-        const expirationDate = new Date(new Date().getTime() + 3600 * 1000);
+        // const expirationDate = new Date(new Date().getTime() + 3600 * 1000);
         localStorage.setItem("tags", tags);
-        localStorage.setItem("expirationDate", expirationDate);
+        // localStorage.setItem("expirationDate", expirationDate);
         dispatch(tagsLoaded(tags));
       })
       .catch((error) => {
@@ -369,9 +369,9 @@ export const loadQuestions = () => {
       .get("http://127.0.0.1:8000/post/questions/")
       .then((res) => {
         const questions = res.data;
-        const expirationDate = new Date(new Date().getTime() + 3600 * 1000);
+        // const expirationDate = new Date(new Date().getTime() + 3600 * 1000);
         localStorage.setItem("questions", questions);
-        localStorage.setItem("expirationDate", expirationDate);
+        // localStorage.setItem("expirationDate", expirationDate);
         dispatch(questionLoaded(questions));
       })
       .catch((error) => {
@@ -401,6 +401,26 @@ export const getQuestionLoadFail = (error) => {
   };
 };
 
+export const getQuestion = (slug) => {
+  return (dispatch) => {
+    dispatch(getQuestionLoading());
+    axios
+      .get(
+        `http://127.0.0.1:8000/post/questions/${slug}/`
+      )
+      .then((res) => {
+        const question = res.data;
+        // const expirationDate = new Date(new Date().getTime() + 3600 * 1000);
+        localStorage.setItem("question", question);
+        // localStorage.setItem("expirationDate", expirationDate);
+        dispatch(getQuestionLoaded(question));
+      })
+      .catch((error) => {
+        dispatch(getQuestionLoadFail(error));
+      });
+  };
+};
+
 //  Answers
 export const answersLoading = () => {
   return {
@@ -419,6 +439,30 @@ export const answersLoadFail = (error) => {
     answers_error: error,
   };
 };
+
+export const loadAnswers = (question_id) =>{
+  return (dispatch) => {
+    dispatch(answersLoading());
+		axios
+			.get(`http://127.0.0.1:8000/post/answers/`)
+			.then((res) => {
+        const all_answers = res.data;
+        let answers = [];
+        all_answers.forEach(function(answer){
+          if(answer.question.id === question_id){
+            answers.push(answer);
+          }
+        })
+				// const expirationDate = new Date(new Date().getTime() + 3600 * 1000);
+				localStorage.setItem("answers", answers);
+				// localStorage.setItem("expirationDate", expirationDate);
+				dispatch(answersLoaded(answers));
+			})
+			.catch((error) => {
+				dispatch(answersLoadFail(error));
+			});
+  }
+}
 
 // get comments
 
@@ -440,22 +484,5 @@ export const commentsLoadFail = (error) => {
   };
 };
 
-export const getQuestion = (slug) => {
-  return (dispatch) => {
-    dispatch(getQuestionLoading());
-    axios
-      .get(
-        `http://127.0.0.1:8000/post/questions/${slug}/`
-      )
-      .then((res) => {
-        const question = res.data;
-        const expirationDate = new Date(new Date().getTime() + 3600 * 1000);
-        localStorage.setItem("question", question);
-        localStorage.setItem("expirationDate", expirationDate);
-        dispatch(getQuestionLoaded(question));
-      })
-      .catch((error) => {
-        dispatch(getQuestionLoadFail(error));
-      });
-  };
-};
+
+

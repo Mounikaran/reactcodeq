@@ -1,8 +1,10 @@
-import { MDBBtn, MDBCard, MDBCardBody, MDBCardHeader, MDBContainer } from 'mdbreact';
+import { MDBCard, MDBCardBody, MDBCardHeader, MDBContainer } from 'mdbreact';
 import React, { Component } from 'react';
 import ReactHtmlParser from "react-html-parser";
 import { connect } from "react-redux";
 import * as actions from "../../../store/actions/actions";
+import AnswerCreate from '../answer/AnswerCreate';
+import AnswerList from '../answer/AnswerList';
 // import { Redirect } from 'react-router-dom';
 
 class QuestionView extends Component {
@@ -85,50 +87,71 @@ class QuestionView extends Component {
     // if(!this.isValidSlug(slug)){
     //     return <Redirect to="/404" />
     // }
-    const { question } = this.props;
+    const { question, isAuthenticated, user } = this.props;
+    // console.log(user)
     return (
-      <MDBContainer fluid className="container-md my-md-3">
-        {question ? (
-          <MDBCard>
-            <MDBCardHeader className="white">
-              <div className="text-20"> {question.title} </div>
-              <div className="text-muted text-12">
-                {" "}
-                posted on : {this.time24to12(question.created_at)}
-              </div>
-              <div className="text-right">
-                {this.props.tags ? question.tag.map((tag, index) =>
-                  this.printName(
-                    this.props.tags.find((obj) => {
-                      return obj.id === tag;
-                    })
-                  )
-                ) : "" }
-                
-              </div>
-            </MDBCardHeader>
-            <MDBCardBody>{ReactHtmlParser(question.code)}</MDBCardBody>
-
-            <hr />
-            <div className="h4 text-center">
-              Answers <span className="badge badge-default"> </span>
-            </div>
-          </MDBCard>
-        ) : (
-          " Loading... "
-        )}
-      </MDBContainer>
-    );
+			<MDBContainer fluid className="container-md my-md-3">
+				{question ? (
+					<>
+						<MDBCard>
+							<MDBCardHeader className="white">
+								<div className="text-20"> {question.title} </div>
+								<div className="text-muted text-12">
+									{" "}
+									posted on : {this.time24to12(question.created_at)}
+								</div>
+								<div className="text-right">
+									{this.props.tags
+										? question.tag.map((tag, index) =>
+												this.printName(
+													this.props.tags.find((obj) => {
+														return obj.id === tag;
+													})
+												)
+										  )
+										: ""}
+								</div>
+							</MDBCardHeader>
+							<MDBCardBody>{ReactHtmlParser(question.code)}</MDBCardBody>
+						</MDBCard>
+						<MDBCard className=" mt-2">
+							
+							<MDBCardBody>
+								<AnswerList question_id={question.id} />
+								<div className="d-flex justify-content-end">
+									{isAuthenticated ? (
+										<div className="w-responsive">
+											<AnswerCreate
+												question_id={question.id}
+												user_id={user ? user.pk : "undefined"}
+												token={this.props.token}
+											/>
+										</div>
+									) : (
+										""
+									)}
+								</div>
+							</MDBCardBody>
+						</MDBCard>
+					</>
+				) : (
+					" Loading... "
+				)}
+			</MDBContainer>
+		);
   }
 }
 
 const mapStateToProps = (state) => {
   return {
-    question: state.question,
-    answers: state.answers,
-    comments: state.comments,
-    tags: state.tags,
-  };
+		question: state.question,
+		answers: state.answers,
+		comments: state.comments,
+		tags: state.tags,
+		token: state.token,
+		isAuthenticated: state.token !== null,
+		user: JSON.parse(state.user),
+	};
 };
 
 const mapDispatchToProps = (dispatch) => {
