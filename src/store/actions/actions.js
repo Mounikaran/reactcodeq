@@ -241,14 +241,14 @@ export const authCheckState = () => {
       //   dispatch(userLoadFail());
       //   dispatch(profileFail());
       // } else {
-        dispatch(authSuccess(token));
-        dispatch(userLoaded(user, token));
-        dispatch(profileLoaded(profile));
-        // dispatch(
-        //   checkAuthTimeout(
-        //     (expirationDate.getTime() - new Date().getTime()) / 1000
-        //   )
-        // );
+      dispatch(authSuccess(token));
+      dispatch(userLoaded(user, token));
+      dispatch(profileLoaded(profile));
+      // dispatch(
+      //   checkAuthTimeout(
+      //     (expirationDate.getTime() - new Date().getTime()) / 1000
+      //   )
+      // );
       // }
     }
   };
@@ -369,6 +369,8 @@ export const loadQuestions = () => {
       .get("http://127.0.0.1:8000/post/questions/")
       .then((res) => {
         const questions = res.data;
+        // console.log(answers);
+
         // const expirationDate = new Date(new Date().getTime() + 3600 * 1000);
         localStorage.setItem("questions", questions);
         // localStorage.setItem("expirationDate", expirationDate);
@@ -379,7 +381,6 @@ export const loadQuestions = () => {
       });
   };
 };
-
 
 // get Question
 
@@ -405,11 +406,10 @@ export const getQuestion = (slug) => {
   return (dispatch) => {
     dispatch(getQuestionLoading());
     axios
-      .get(
-        `http://127.0.0.1:8000/post/questions/${slug}/`
-      )
+      .get(`http://127.0.0.1:8000/post/questions/${slug}/`)
       .then((res) => {
         const question = res.data;
+        dispatch(loadAnswers(question.answer))
         // const expirationDate = new Date(new Date().getTime() + 3600 * 1000);
         localStorage.setItem("question", question);
         // localStorage.setItem("expirationDate", expirationDate);
@@ -440,29 +440,29 @@ export const answersLoadFail = (error) => {
   };
 };
 
-export const loadAnswers = (question_id) =>{
+export const loadAnswers = (answer_list) => {
   return (dispatch) => {
     dispatch(answersLoading());
-		axios
-			.get(`http://127.0.0.1:8000/post/answers/`)
-			.then((res) => {
-        const all_answers = res.data;
+    axios
+      .get("http://127.0.0.1:8000/post/answers/")
+      .then((res) => res.data)
+      .then((res) => {
+        const all_answers = res;
         let answers = [];
-        all_answers.forEach(function(answer){
-          if(answer.question.id === question_id){
-            answers.push(answer);
-          }
-        })
-				// const expirationDate = new Date(new Date().getTime() + 3600 * 1000);
-				localStorage.setItem("answers", answers);
-				// localStorage.setItem("expirationDate", expirationDate);
-				dispatch(answersLoaded(answers));
-			})
-			.catch((error) => {
-				dispatch(answersLoadFail(error));
-			});
-  }
-}
+        answer_list.map((item) => {
+          let req_answer = all_answers.find((answer) => answer.slug === item);
+          if (req_answer) answers.push(req_answer);
+        });
+        // const expirationDate = new Date(new Date().getTime() + 3600 * 1000);
+        localStorage.setItem("answers", answers);
+        // localStorage.setItem("expirationDate", expirationDate);
+        dispatch(answersLoaded(answers));
+      })
+      .catch((error) => {
+        dispatch(answersLoadFail(error));
+      });
+  };
+};
 
 // get comments
 
@@ -483,6 +483,3 @@ export const commentsLoadFail = (error) => {
     comments_error: error,
   };
 };
-
-
-
