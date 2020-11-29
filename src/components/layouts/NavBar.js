@@ -36,10 +36,17 @@ class NavBar extends Component {
   render() {
     const { isAuthenticated } = this.props;
     return (
-      <MDBNavbar className="blue-gradient container-fluid sticky-top" dark expand="md">
+      <MDBNavbar
+        className="blue-gradient container-fluid sticky-top"
+        dark
+        expand="md"
+      >
         <MDBContainer>
           <MDBNavbarBrand>
-            <Link to="/"> <strong className="text-white">CodeQ</strong> </Link>
+            <Link to="/">
+              {" "}
+              <strong className="text-white">CodeQ</strong>{" "}
+            </Link>
           </MDBNavbarBrand>
           <MDBNavbarToggler onClick={this.toggleCollapse} />
           <MDBCollapse id="navbarCollapse3" isOpen={this.state.isOpen} navbar>
@@ -55,7 +62,15 @@ class NavBar extends Component {
                   <MDBNavLink to="/profile">Profile</MDBNavLink>
                 </MDBNavItem> */}
                 <MDBNavItem>
-                  <MDBNavLink to="#" onClick={this.logout}>Logout</MDBNavLink>
+                  <MDBNavLink to="#" onClick={this.logout}>
+                    Logout
+                  </MDBNavLink>
+                </MDBNavItem>
+                <MDBNavItem>
+                  <MDBNavLink to="/chat">
+                    {" "}
+                    <i class="fas fa-comment-alt"></i>{" "}
+                  </MDBNavLink>
                 </MDBNavItem>
               </MDBNavbarNav>
             ) : (

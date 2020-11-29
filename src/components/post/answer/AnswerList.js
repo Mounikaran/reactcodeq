@@ -40,7 +40,7 @@ class AnswerList extends Component {
           ? answers.map((answer, index) => (
               <MDBRow key={index}>
                 <MDBCol size="10">{ReactHtmlParser(answer.code)}</MDBCol>
-                <MDBCol size="2">likes</MDBCol>
+                <MDBCol size="2">Votes</MDBCol>
               </MDBRow>
             ))
           : ""}

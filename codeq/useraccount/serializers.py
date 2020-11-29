@@ -24,11 +24,6 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         lookup_field = 'username'
         
 
-class GroupSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Group
-        fields = ['url', 'name']
-
 class ProfileSerializer(serializers.ModelSerializer):
     tag = fields.MultipleChoiceField(choices=TAGS)
     class Meta:

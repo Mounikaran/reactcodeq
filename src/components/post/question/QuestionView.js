@@ -126,25 +126,28 @@ class QuestionView extends Component {
                 <div className="bg-white">
                   <div className="h4 text-center">
                     <span className="badge badge-default">
-                      {question.answer.length} Answers
+                      {question.answer.length} Answer(s)
                     </span>
                   </div>
                   <hr />
                 </div>
                 {answers ? <AnswerList answers={answers} /> : ""}
-
-                <div className="d-flex justify-content-end">
-                  {isAuthenticated ? (
-                    <div className="w-responsive">
-                      <AnswerCreate
-                        question_id={question.id}
-                        user_id={user ? user.pk : "undefined"}
-                        token={this.props.token}
-                      />
-                    </div>
-                  ) : (
-                    ""
-                  )}
+                
+                <div>
+                  Add Your Answer
+                  <div className="d-flex justify-content-end">
+                    {isAuthenticated ? (
+                      <div className="w-responsive">
+                        <AnswerCreate
+                          question_id={question.id}
+                          user_id={user ? user.pk : "undefined"}
+                          token={this.props.token}
+                        />
+                      </div>
+                    ) : (
+                      ""
+                    )}
+                  </div>
                 </div>
               </MDBCardBody>
             </MDBCard>

@@ -3,7 +3,7 @@ from rest_framework import viewsets
 from rest_framework import permissions
 
 from codeq.permissions import IsOwnerOrReadOnlyUser, IsOwnerOrReadOnly
-from .serializers import UserSerializer, GroupSerializer, ProfileSerializer
+from .serializers import UserSerializer, ProfileSerializer
 from .models import Profile
 
 
@@ -21,15 +21,3 @@ class ProfileViewSet(viewsets.ModelViewSet):
     serializer_class = ProfileSerializer
     lookup_field = 'slug'
     permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
-
-
-
-class GroupViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows groups to be viewed or edited.
-    """
-    queryset = Group.objects.all()
-    serializer_class = GroupSerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-

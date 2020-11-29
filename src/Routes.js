@@ -17,7 +17,14 @@ import DashBoard from "./components/user/DashBoard";
 // Questions
 import QuestionCreate from "./components/post/question/QuestionCreate";
 import QuestionView from './components/post/question/QuestionView';
+
 import Page404 from "./components/404/Page404";
+
+import GroupView from "./components/post/groups/GroupView";
+import Chat from "./components/chat/Chat";
+import Complaint from "./components/complaints/Complaint";
+
+import Dashboard from "./components/admin/Dashboard";
 
 class Routes extends Component {
   constructor(props) {
@@ -69,9 +76,22 @@ class Routes extends Component {
           component={QuestionView}
         />
 
-        {/* HomePage  */}w
+        {/* groups */}
+
+        <Route exact path="/groups" component={GroupView} />
+
+        {/* chat */}
+        <Route exact path="/chat" component={Chat} />
+
+        {/* Complaints */}
+        <Route exact path="/complaint" component={Complaint} />
+
+        {/* HomePage  */}
         <Route exact path="/" component={() => <HomePage {...this.props} />} />
         
+        {/* admin page */}
+        <Route exact path="/admin" component={Dashboard}/>
+
         {/* 404 page */}
         <Route exact path="/404" component={Page404} />
         <Redirect from="*" to="/404" />

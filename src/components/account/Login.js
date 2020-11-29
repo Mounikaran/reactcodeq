@@ -120,14 +120,14 @@ class Login extends Component {
                     </MDBBtn>
                   </div>
                 </form>
-                <p className="font-small dark-grey-text text-right d-flex justify-content-center mb-3 pt-2">
+                {/* <p className="font-small dark-grey-text text-right d-flex justify-content-center mb-3 pt-2">
                   or Sign in with:
                 </p>
                 <div className="row my-3 d-flex justify-content-center">
                   <MDBBtn type="button" color="white" className="z-depth-1a">
                     <MDBIcon fab icon="google-plus-g" className="blue-text" />
                   </MDBBtn>
-                </div>
+                </div> */}
               </MDBCardBody>
               <MDBModalFooter className="mx-5 pt-3 mb-1">
                 <p className="font-small grey-text d-flex justify-content-end">

@@ -5,6 +5,7 @@ import axios from "axios";
 import "./App.css";
 
 import NavBar from "./components/layouts/NavBar";
+import AdminNavBar from "./components/layouts/AdminNavBar"
 import Footer from "./components/layouts/Footer";
 import Routes from "./Routes";
 
@@ -17,6 +18,7 @@ class App extends Component {
     super(props);
     this.state = {
       in_reset: false,
+      is_admin : true,
     };
   }
 
@@ -41,12 +43,16 @@ class App extends Component {
     return (
       <Fragment>
         <BrowserRouter>
-          <NavBar {...this.props} />
+        {this.state.is_admin ? 
+        <AdminNavBar {...this.props} />
+        :
+        <NavBar {...this.props} />
+        }
           <main>
             <Routes {...this.props} />
           </main>
         </BrowserRouter>
-        {this.state.in_reset ? "" : <Footer />}
+        {this.state.is_admin ? "" : <Footer />}
       </Fragment>
     );
   }
